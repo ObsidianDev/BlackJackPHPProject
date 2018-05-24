@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>kashgrab</title>
+	<?php
+		include_once('Middle.php');
+	?>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<button name="split">Stand</button>
+<button id="hit" name="hit">Hit</button>
+<button name="double">Double</button>
+<button name="split">Split</button>
+<button id="surrender" name="surrender">Surrender</button>
+<div id="div1"></div>
+<script type="text/javascript">
+	$("#hit").click(function(){
+    $.ajax({url: "Middle.php",data:{hit:'true'}, success: function(result){
+        	$("#div1").html(result);
+    	}});
+	});
+	$("#surrender").click(function(){
+    $.ajax({url: "Middle.php",data:{surrender:'true'}, success: function(){
+        	$("#div1").html('');
+    	}});
+	});
+</script>
+</body>
+</html>
