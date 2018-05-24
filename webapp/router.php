@@ -12,10 +12,13 @@ use ArmoredCore\Facades\Router;
  *  Use convention: controllerName@methodActionName
  ****************************************************************************/
 
-Router::get('/',			'HomeController/index');
-Router::get('home/',		'HomeController/index');
-Router::get('home/index',	'HomeController/index');
-Router::get('home/start',	'HomeController/start');
+Router::get('/',				'HomeController/index');
+Router::get('home/',			'HomeController/index');
+Router::get('home/index',		'HomeController/index');
+Router::get('home/start',		'HomeController/start');
+Router::get('login/',			'LoginController/index');
+Router::post('login/',			'LoginController/login');
+		 
 
 
 
