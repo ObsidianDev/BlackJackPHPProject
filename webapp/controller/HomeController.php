@@ -21,5 +21,16 @@ class HomeController extends BaseController
         //View::attachSubView('titlecontainer', 'layout.pagetitle', ['title' => 'Quick Start']);
         return View::make('home.start');
     }
+     public function login(){
+
+    	$dados = Post::getAll();
+
+    	//verificar se utilizador existe na bd
+    	Session::set('username',$dados['username']);
+    	Session::set('password',$dados['password']);
+
+		
+    	
+    }
 
 }
