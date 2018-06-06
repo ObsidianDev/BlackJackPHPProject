@@ -21,6 +21,7 @@ class Game extends Model{
 		}
 	public function Draw(){	
 			Session::set('pointCounter',0);	
+			Session::set('pointCounterAI',0);	
 			if (!Session::has('hand')) {
 				Session::set('hand',array());
 				Session::set('handAI',array());
@@ -41,9 +42,9 @@ class Game extends Model{
 						array_push($handAI, $deck[$i]);
 					}
 					unset($deck[$i]);
-					Session::set('first', false);
 					Session::set('arrayCounter', Session::get('arrayCounter')+1);
 				}
+				Session::set('first', false);
 			}
 			else{
 				for($i=0;$i<2;$i++){
@@ -60,6 +61,27 @@ class Game extends Model{
 			Session::set('hand',$hand);
 			Session::set('handAI',$handAI);
 			Session::set('deck',$deck);
+			$countVal=0;
+			foreach (Session::get('handAI') as $valueAI) {
+				if($countVal>0){
+					echo '<img src='.Asset::image('Cards/cardBack_red5.png').'>';
+				}
+				else{
+					echo '<img src='.Asset::image($valueAI->getAsset()).'>';
+				}
+				if (substr($valueAI->getName(), 0, 3)==='Ace' && Session::get('pointCounterAI')>10) {
+						Session::set('pointCounterAI', intval(Session::get('pointCounterAI'))+1);
+				}
+				else{
+						Session::set('pointCounterAI', intval(Session::get('pointCounterAI'))+intval($valueAI->getPoints()));
+
+				}
+				$countVal++;
+			}
+			echo Session::get('pointCounterAI');
+			
+			echo '<br><br><br>';
+			
 			foreach (Session::get('hand') as $value) {
 				echo '<img src='.Asset::image($value->getAsset()).'>';
 				if (substr($value->getName(), 0, 3)==='Ace' && Session::get('pointCounter')>10) {
@@ -72,19 +94,6 @@ class Game extends Model{
 
 			}
 			echo Session::get('pointCounter');
-			echo '<br><br><br>';
-			foreach (Session::get('handAI') as $value) {
-				echo '<img src='.Asset::image($value->getAsset()).'>';
-				if (substr($value->getName(), 0, 3)==='Ace' && Session::get('pointCounterAI')>10) {
-						Session::set('pointCounterAI', intval(Session::get('pointCounterAI'))+1);
-				}
-				else{
-						Session::set('pointCounterAI', intval(Session::get('pointCounterAI'))+intval($value->getPoints()));
-
-				}
-
-			}
-			echo Session::get('pointCounterAI');
 			return Session::get('pointCounter');
 		}
 }
