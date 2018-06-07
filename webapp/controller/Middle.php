@@ -15,10 +15,6 @@ class Middle extends BaseController {
 		if (!Session::has('arrayCounter')) {
 			Session::set('arrayCounter', 0);
 		}
-		if (!Session::has('pointCounter')) {
-			Session::set('pointCounter', 0);
-			Session::set('pointCounterAI', 0);
-		}
 	$card=array();
 	$card[1]= new Cards("Ace of Spades",11,"Cards/cardSpadesA.png");
 	$card[2]= new Cards("Two of Spades",2,"Cards/cardSpades2.png");
@@ -85,10 +81,21 @@ class Middle extends BaseController {
 		$game= new Game();	
 		if (Post::has('hit')) {
 			$deckDraw=$game->Draw();
+			echo $game->winVerifs();
 		}
-		if (Post::has('surrender')) {
+		else if (Post::has('surrender')) {
 			Session::destroy();
 		}
+		else if (Post::has('stand')) {
+			Session::destroy();
+		}
+		else if (Post::has('double')) {
+			Session::destroy();
+		}
+		else if (Post::has('split')) {
+			Session::destroy();
+		}
+
 	}
 }
 class Cards{
