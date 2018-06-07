@@ -53,7 +53,9 @@ class Game extends Model{
 						array_push($hand, $deck[Session::get('arrayCounter')]);
 					}
 					else{
-						if (Session::get('pointCounterAI')<17) {
+						$nextPoints=$deck[Session::get('arrayCounter')]->getPoints();
+						Session::set('totalAI', Session::get('totalAI')+intval($nextPoints));
+						if (Session::get('totalAI')<17) {
 							array_push($handAI, $deck[Session::get('arrayCounter')]);
 							
 						}
@@ -66,7 +68,6 @@ class Game extends Model{
 			Session::set('hand',$hand);
 			Session::set('handAI',$handAI);
 			Session::set('deck',$deck);
-			if (Session::get('pointCounterAI')<16) {
 				$countVal=0;
 				foreach (Session::get('handAI') as $valueAI) {
 					if($countVal>0){
@@ -82,10 +83,11 @@ class Game extends Model{
 							Session::set('pointCounterAI', intval(Session::get('pointCounterAI'))+intval($valueAI->getPoints()));
 
 					}
+					if (!Session::has('totalAI')) {
+						Session::set('totalAI', Session::get('pointCounterAI'));
+					}
 					$countVal++;
 				}
-				echo Session::get('pointCounterAI');
-			}
 			
 			echo '<br><br><br>';
 			
@@ -122,6 +124,9 @@ class Game extends Model{
 			}
 			if($res !=0){
 				$msg='<br>';
+				foreach (Session::get('handAI') as $valueAI) {
+					echo '<img src='.Asset::image($valueAI->getAsset()).'>';
+				}
 				if($res==1){
 					$msg.= 'Blackjack! You win';
 				}
@@ -142,6 +147,7 @@ class Game extends Model{
 				Session::remove('pointCounterAI');
 				Session::remove('hand');
 				Session::remove('handAI');
+				Session::remove('totalAI');
 				Session::remove('first');
 				Session::set('first', true);
 			}
