@@ -80,17 +80,20 @@ class Middle extends BaseController {
 	function postHandler(){	
 		$game= new Game();	
 		if (Post::has('hit')) {
-			$deckDraw=$game->Draw();
-			echo $game->winVerifs();
+			$game->draw_Hit();
+			echo $game->winVerifs('');
 		}
 		else if (Post::has('surrender')) {
 			Session::destroy();
 		}
 		else if (Post::has('stand')) {
-			Session::destroy();
+			$game->stand();
+			echo $game->winVerifs('stand');
 		}
 		else if (Post::has('double')) {
-			Session::destroy();
+			$game->double();
+			$game->stand();
+			echo $game->winVerifs('stand');
 		}
 		else if (Post::has('split')) {
 			Session::destroy();

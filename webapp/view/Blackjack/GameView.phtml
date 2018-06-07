@@ -9,9 +9,9 @@
 </head>
 <body>
 <button id="hit" name="hit">Hit</button>
-<button name="split">Stand</button>
-<button name="double">Double</button>
-<button name="split">Split</button>
+<button id="stand" name="stand">Stand</button>
+<button id="double" name="double">Double</button>
+<button id="split" name="split">Split</button>
 <button id="surrender" name="surrender">Surrender</button>
 <div id="div1"></div>
 <script type="text/javascript">
@@ -23,6 +23,11 @@
 	$("#surrender").click(function(){
 	    $.ajax({url: "game", type: 'post', data:{surrender:'true'}, success: function(){
 	        	$("#div1").html('');
+	    }});
+	});
+	$("#stand").click(function(){
+	    $.ajax({url: "game", type: 'post', data:{stand:'true'}, success: function(result){
+	        	$("#div1").html(result);
 	    }});
 	});
 </script>

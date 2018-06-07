@@ -19,7 +19,7 @@ class Game extends Model{
 			}
 			return $compDeck;//@return array
 		}
-	public function Draw(){	
+	public function draw_Hit(){	
 			Session::set('pointCounter',0);	
 			Session::set('pointCounterAI',0);	
 			if (!Session::has('hand')) {
@@ -53,8 +53,6 @@ class Game extends Model{
 						array_push($hand, $deck[Session::get('arrayCounter')]);
 					}
 					else{
-						$nextPoints=$deck[Session::get('arrayCounter')]->getPoints();
-						Session::set('totalAI', Session::get('totalAI')+intval($nextPoints));
 						if (Session::get('totalAI')<17) {
 							array_push($handAI, $deck[Session::get('arrayCounter')]);
 							
@@ -83,12 +81,10 @@ class Game extends Model{
 							Session::set('pointCounterAI', intval(Session::get('pointCounterAI'))+intval($valueAI->getPoints()));
 
 					}
-					if (!Session::has('totalAI')) {
-						Session::set('totalAI', Session::get('pointCounterAI'));
-					}
 					$countVal++;
 				}
-			
+			Session::set('totalAI', Session::get('pointCounterAI'));
+			echo Session::get('totalAI');
 			echo '<br><br><br>';
 			
 			foreach (Session::get('hand') as $value) {
@@ -105,9 +101,18 @@ class Game extends Model{
 			echo Session::get('pointCounter');
 			return Session::get('pointCounter');
 		}
-		public function winVerifs(){
+		public function winVerifs($case){
 			$res=0;$msg='';
-			if (Session::get('pointCounter')==21&&(Session::get('pointCounterAI')<22||Session::get('pointCounterAI')>21)) {
+			 if (Session::get('pointCounterAI')>Session::get('pointCounter') && $case==='stand') {
+				$res=6;
+			}
+			else if (Session::get('pointCounterAI')<Session::get('pointCounter') && $case==='stand') {
+				$res=7;
+			}
+			else  if (Session::get('pointCounterAI')==Session::get('pointCounter') && $case==='stand') {
+				$res=8;
+			}
+			else if (Session::get('pointCounter')==21&&(Session::get('pointCounterAI')<22||Session::get('pointCounterAI')>21)) {
 				$res=1;
 			}
 			else if (Session::get('pointCounterAI')==21&&(Session::get('pointCounter')<22||Session::get('pointCounter')>21)) {
@@ -122,6 +127,7 @@ class Game extends Model{
 			else if(Session::get('pointCounterAI')>21&&Session::get('pointCounter')>21){
 				$res=5;
 			}
+			
 			if($res !=0){
 				$msg='<br>';
 				foreach (Session::get('handAI') as $valueAI) {
@@ -139,6 +145,15 @@ class Game extends Model{
 				else if($res==5){
 					$msg.= 'Double bust! Nobody wins';
 				}
+				else if($res==6){
+					$msg.= 'Dealer wins.';
+				}
+				else if($res==7){
+					$msg.= 'You win.';
+				}
+				else if($res==8){
+					$msg.= 'Tie.';
+				}
 				else{
 					$msg.= 'Dealer bust! You win';
 				}
@@ -152,6 +167,22 @@ class Game extends Model{
 				Session::set('first', true);
 			}
 			return $msg;
+		}
+		public function stand(){
+			while (Session::get('totalAI')<17) {
+				$deck=unserialize(serialize(Session::get('deck')));
+				$handAI=unserialize(serialize(Session::get('handAI')));
+				array_push($handAI, $deck[Session::get('arrayCounter')]);
+				Session::set('handAI',$handAI);
+				Session::set('totalAI', Session::get('totalAI')+intval($deck[Session::get('arrayCounter')]->getPoints()));
+				unset($deck[Session::get('arrayCounter')]);
+				Session::set('deck',$deck);
+				Session::set('arrayCounter', Session::get('arrayCounter')+1);
+				echo '<img src='.Asset::image('Cards/cardBack_red5.png').'>';
+			}
+		}
+		public function double(){
+			//double current bet
 		}
 }
 ?>
