@@ -109,6 +109,11 @@ class Game extends Model{
 					echo '<img src='.Asset::image($valueAI->getAsset()).'>';
 				}
 				echo Session::get('totalAI');
+				echo '<br><br><br>';
+				foreach (unserialize(serialize(Session::get('hand'))) as $value) {
+					echo '<img src='.Asset::image($value->getAsset()).'>';
+				}
+				echo Session::get('pointCounter');
 				if($res==1){
 					$msg.= 'Blackjack! You win';
 				}
@@ -129,8 +134,26 @@ class Game extends Model{
 				}
 				else{
 					$msg.= 'Dealer bust! You win';
-				}	
+				}
 				$this->surrender();
+			}
+			else{
+				$countVal=0;
+				foreach (Session::get('handAI') as $valueAI) {
+					if($countVal>0){
+						echo '<img src='.Asset::image('Cards/cardBack_red5.png').'>';
+					}
+					else{
+						echo '<img src='.Asset::image($valueAI->getAsset()).'>';
+					}
+					$countVal++;
+				}
+				echo Session::get('handAI')[0]->getPoints();
+				echo '<br><br><br>';
+				foreach (Session::get('hand') as $value) {
+					echo '<img src='.Asset::image($value->getAsset()).'>';
+				}
+				echo Session::get('pointCounter');
 			}
 			return $msg;
 		}
@@ -144,24 +167,16 @@ class Game extends Model{
 				unset($deck[Session::get('arrayCounter')]);
 				Session::set('deck',$deck);
 				Session::set('arrayCounter', Session::get('arrayCounter')+1);
-				echo '<img src='.Asset::image('Cards/cardBack_red5.png').'>';
 			}
 		}
 		public function double(){
 			//double current bet
 		}
 		public function pointCount()
-		{
-			$countVal=0;
+		{			
 			$midAceAI=false;
 			$midAce=false;
 			foreach (Session::get('handAI') as $valueAI) {
-				if($countVal>0){
-					echo '<img src='.Asset::image('Cards/cardBack_red5.png').'>';
-				}
-				else{
-					echo '<img src='.Asset::image($valueAI->getAsset()).'>';
-				}
 				if (substr($valueAI->getName(), 0, 3)==='Ace' && Session::get('pointCounterAI')>10) {
 					Session::set('pointCounterAI', intval(Session::get('pointCounterAI'))+1);
 				}
@@ -170,18 +185,13 @@ class Game extends Model{
 						$midAceAI=true;
 					Session::set('pointCounterAI', intval(Session::get('pointCounterAI'))+intval($valueAI->getPoints()));
 				}
-				$countVal++;
 			}
 			Session::set('totalAI', Session::get('pointCounterAI'));
 			if (Session::get('totalAI')>21&&$midAceAI==true) {
 				Session::set('totalAI', Session::get('totalAI')-10);
 				$midAceAI=false;
 			}
-			echo Session::get('handAI')[0]->getPoints();
-			echo '<br><br><br>';
-			
 			foreach (Session::get('hand') as $value) {
-				echo '<img src='.Asset::image($value->getAsset()).'>';
 				if (substr($value->getName(), 0, 3)==='Ace' && Session::get('pointCounter')>10) {
 						Session::set('pointCounter', intval(Session::get('pointCounter'))+1);
 				}
@@ -189,7 +199,6 @@ class Game extends Model{
 					if (substr($value->getName(), 0, 3)==='Ace' && Session::get('pointCounter')<10)
 						$midAce=true;
 					Session::set('pointCounter', intval(Session::get('pointCounter'))+intval($value->getPoints()));
-
 				}
 
 			}
@@ -197,7 +206,7 @@ class Game extends Model{
 				Session::set('pointCounter', Session::get('pointCounter')-10);
 				$midAce=false;
 			}
-			echo Session::get('pointCounter');
+			
 			return Session::get('pointCounter');
 		}
 		public function surrender(){
