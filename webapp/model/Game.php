@@ -2,151 +2,212 @@
 use ActiveRecord\Model; 
 use ArmoredCore\WebObjects\Session;
 use ArmoredCore\WebObjects\Asset;
-
 class Game extends Model{
-
 	public function __construct(){
-
 	}
-	
 	public function DeckShuffler($cards){//@param $cards array
-		$numbers=range(1, 52);
-		$compDeck=array();
-		for ($o=0; $o < 8; $o++) { 
-			$deck=$numbers;
-			shuffle($deck);
-			for ($i=0; $i < 52; $i++) { 
-				array_push($compDeck, $cards[$deck[$i]]);
-				unset($deck[$i]);
+			$numbers=range(1, 52);
+			$compDeck=array();
+			for ($o=0; $o < 8; $o++) { 
+				$deck=$numbers;
+				shuffle($deck);
+				for ($i=0; $i < 52; $i++) { 
+					array_push($compDeck, $cards[$deck[$i]]);
+					unset($deck[$i]);
+				}
 			}
+			return $compDeck;//@return array
 		}
-		return $compDeck;//@return array
-	}
-
-	public function Draw(){	
-		Session::set('pointCounter',0);	
-		Session::set('pointCounterAI',0);	
-		if (!Session::has('hand')) {
-			Session::set('hand',array());
-			Session::set('handAI',array());
-			$hand=array();
-			$handAI=array();	
-		}
-		else{
-			$hand=unserialize(serialize(Session::get('hand')));
-			$handAI=unserialize(serialize(Session::get('handAI')));
-		}
-		$deck=unserialize(serialize(Session::get('deck')));
-		$drawCount=Session::get('arrayCounter');
-		if (Session::get('first')==true) {
-			for ($i=0; $i < 4; $i++) { 
-				if ($i<2) {
-					array_push($hand, $deck[Session::get('arrayCounter')]);
-				}
-				else{
-					array_push($handAI, $deck[Session::get('arrayCounter')]);
-				}
-				unset($deck[$i]);
-				Session::set('arrayCounter', Session::get('arrayCounter')+1);
+	public function draw_Hit(){	
+			Session::set('pointCounter',0);	
+			Session::set('pointCounterAI',0);	
+			if (!Session::has('hand')) {
+				Session::set('hand',array());
+				Session::set('handAI',array());
+				$hand=array();
+				$handAI=array();	
 			}
-			Session::set('first', false);
-		}
-		else{
-			for($i=0;$i<2;$i++){
-				if ($i==0) {
-					array_push($hand, $deck[Session::get('arrayCounter')]);
-				}
-				else{
-					$nextPoints=$deck[Session::get('arrayCounter')]->getPoints();
-					Session::set('totalAI', Session::get('totalAI')+intval($nextPoints));
-					if (Session::get('totalAI')<17) {
-						array_push($handAI, $deck[Session::get('arrayCounter')]);
-						
+			else{
+				$hand=unserialize(serialize(Session::get('hand')));
+				$handAI=unserialize(serialize(Session::get('handAI')));
+			}
+			$deck=unserialize(serialize(Session::get('deck')));
+			if (Session::get('first')==true) {
+				for ($i=0; $i < 4; $i++) { 
+					if ($i<2) {
+						array_push($hand, $deck[Session::get('arrayCounter')]);
 					}
+					else{
+						array_push($handAI, $deck[Session::get('arrayCounter')]);
+					}
+					unset($deck[$i]);
+					Session::set('arrayCounter', Session::get('arrayCounter')+1);
 				}
-				
-				unset($deck[Session::get('arrayCounter')]);
-				Session::set('arrayCounter', Session::get('arrayCounter')+1);
+				Session::set('first', false);
 			}
-		}
-		Session::set('hand',$hand);
-		Session::set('handAI',$handAI);
-		Session::set('deck',$deck);
-			$countVal=0;
-			foreach (Session::get('handAI') as $valueAI) {
-				if($countVal>0){
-					echo '<img src='.Asset::image('Cards/cardBack_red5.png').'>';
+			else{
+				for($i=0;$i<2;$i++){
+					if ($i==0) {
+						array_push($hand, $deck[Session::get('arrayCounter')]);
+					}
+					else{
+						if (Session::get('totalAI')<17) {
+							array_push($handAI, $deck[Session::get('arrayCounter')]);
+							
+						}
+					}
+					
+					unset($deck[Session::get('arrayCounter')]);
+					Session::set('arrayCounter', Session::get('arrayCounter')+1);
 				}
-				else{
+			}
+			Session::set('hand',$hand);
+			Session::set('handAI',$handAI);
+			Session::set('deck',$deck);
+			$this->pointCount();
+		}
+		public function winVerifs($case){
+			$res=0;$msg='';
+			 if (Session::get('totalAI')>Session::get('pointCounter') && Session::get('totalAI') < 22  && $case==='stand') {
+				$res=6;
+			}
+			else if (Session::get('totalAI')>Session::get('pointCounter') && Session::get('totalAI') > 22  && $case==='stand') {
+				$res=4;
+			}
+			else if (Session::get('totalAI')<Session::get('pointCounter') && $case==='stand') {
+				$res=7;
+			}
+			else  if (Session::get('totalAI')==Session::get('pointCounter') && $case==='stand') {
+				$res=8;
+			}
+			else if (Session::get('pointCounter')==21&&(Session::get('pointCounterAI')<22||Session::get('pointCounterAI')>21)) {
+				$res=1;
+			}
+			else if (Session::get('pointCounterAI')==21&&(Session::get('pointCounter')<22||Session::get('pointCounter')>21)) {
+				$res=2;
+			}
+			else if (Session::get('pointCounter')>21&&Session::get('pointCounterAI')<22) {
+				$res=3;
+			}
+			else if (Session::get('pointCounterAI')>21&&Session::get('pointCounter')<22) {
+				$res=4;
+			}
+			else if(Session::get('pointCounterAI')>21&&Session::get('pointCounter')>21){
+				$res=3;
+			}
+			else if(Session::get('pointCounterAI')==21&&Session::get('pointCounter')==21&& sizeof(Session::get('hand'))>2){
+				$res=2;
+			}
+			else if(Session::get('pointCounterAI')==21&&Session::get('pointCounter')==21&& sizeof(Session::get('hand'))==2){
+				$res=1;
+			}
+			
+			if($res !=0){
+				$msg='<br>';
+				foreach (unserialize(serialize(Session::get('handAI'))) as $valueAI) {
 					echo '<img src='.Asset::image($valueAI->getAsset()).'>';
 				}
-				if (substr($valueAI->getName(), 0, 3)==='Ace' && Session::get('pointCounterAI')>10) {
-						Session::set('pointCounterAI', intval(Session::get('pointCounterAI'))+1);
+				echo Session::get('totalAI');
+				echo '<br><br><br>';
+				foreach (unserialize(serialize(Session::get('hand'))) as $value) {
+					echo '<img src='.Asset::image($value->getAsset()).'>';
+				}
+				echo Session::get('pointCounter');
+				if($res==1){
+					$msg.= 'Blackjack! You win';
+				}
+				else if($res==2){
+					$msg.= 'Oof. Dealer blackjack! You lose';
+				}
+				else if($res==3){
+					$msg.= 'Bust! You lose';
+				}
+				else if($res==6){
+					$msg.= 'Dealer wins.';
+				}
+				else if($res==7){
+					$msg.= 'You win.';
+				}
+				else if($res==8){
+					$msg.= 'Tie.';
 				}
 				else{
-						Session::set('pointCounterAI', intval(Session::get('pointCounterAI'))+intval($valueAI->getPoints()));
-
+					$msg.= 'Dealer bust! You win';
 				}
-				if (!Session::has('totalAI')) {
-					Session::set('totalAI', Session::get('pointCounterAI'));
-				}
-				$countVal++;
-			}
-		
-		echo '<br><br><br>';
-		
-		foreach (Session::get('hand') as $value) {
-			echo '<img src='.Asset::image($value->getAsset()).'>';
-			if (substr($value->getName(), 0, 3)==='Ace' && Session::get('pointCounter')>10) {
-					Session::set('pointCounter', intval(Session::get('pointCounter'))+1);
+				$this->surrender();
 			}
 			else{
-					Session::set('pointCounter', intval(Session::get('pointCounter'))+intval($value->getPoints()));
-
+				$countVal=0;
+				foreach (Session::get('handAI') as $valueAI) {
+					if($countVal>0){
+						echo '<img src='.Asset::image('Cards/cardBack_red5.png').'>';
+					}
+					else{
+						echo '<img src='.Asset::image($valueAI->getAsset()).'>';
+					}
+					$countVal++;
+				}
+				echo Session::get('handAI')[0]->getPoints();
+				echo '<br><br><br>';
+				foreach (Session::get('hand') as $value) {
+					echo '<img src='.Asset::image($value->getAsset()).'>';
+				}
+				echo Session::get('pointCounter');
 			}
-
+			return $msg;
 		}
-		echo Session::get('pointCounter');
-		return Session::get('pointCounter');
-	}
-	public function winVerifs(){
-		$res=0;$msg='';
-		if (Session::get('pointCounter')==21&&(Session::get('pointCounterAI')<22||Session::get('pointCounterAI')>21)) {
-			$res=1;
+		public function stand(){
+			while (Session::get('totalAI')<17) {
+				$deck=unserialize(serialize(Session::get('deck')));
+				$handAI=unserialize(serialize(Session::get('handAI')));
+				array_push($handAI, $deck[Session::get('arrayCounter')]);
+				Session::set('handAI',$handAI);
+				Session::set('totalAI', Session::get('totalAI')+intval($deck[Session::get('arrayCounter')]->getPoints()));
+				unset($deck[Session::get('arrayCounter')]);
+				Session::set('deck',$deck);
+				Session::set('arrayCounter', Session::get('arrayCounter')+1);
+			}
 		}
-		else if (Session::get('pointCounterAI')==21&&(Session::get('pointCounter')<22||Session::get('pointCounter')>21)) {
-			$res=2;
+		public function double(){
+			//double current bet
 		}
-		else if (Session::get('pointCounter')>21&&Session::get('pointCounterAI')<22) {
-			$res=3;
-		}
-		else if (Session::get('pointCounterAI')>21&&Session::get('pointCounter')<22) {
-			$res=4;
-		}
-		else if(Session::get('pointCounterAI')>21&&Session::get('pointCounter')>21){
-			$res=5;
-		}
-		if($res !=0){
-			$msg='<br>';
+		public function pointCount()
+		{			
+			$midAceAI=false;
+			$midAce=false;
 			foreach (Session::get('handAI') as $valueAI) {
-				echo '<img src='.Asset::image($valueAI->getAsset()).'>';
+				if (substr($valueAI->getName(), 0, 3)==='Ace' && Session::get('pointCounterAI')>10) {
+					Session::set('pointCounterAI', intval(Session::get('pointCounterAI'))+1);
+				}
+				else{
+					if (substr($valueAI->getName(), 0, 3)==='Ace' && Session::get('pointCounterAI')<10) 
+						$midAceAI=true;
+					Session::set('pointCounterAI', intval(Session::get('pointCounterAI'))+intval($valueAI->getPoints()));
+				}
 			}
-			if($res==1){
-				$msg.= 'Blackjack! You win';
+			Session::set('totalAI', Session::get('pointCounterAI'));
+			if (Session::get('totalAI')>21&&$midAceAI==true) {
+				Session::set('totalAI', Session::get('totalAI')-10);
+				$midAceAI=false;
 			}
-			else if($res==2){
-				$msg.= 'Oof. Dealer blackjack! You lose';
+			foreach (Session::get('hand') as $value) {
+				if (substr($value->getName(), 0, 3)==='Ace' && Session::get('pointCounter')>10) {
+						Session::set('pointCounter', intval(Session::get('pointCounter'))+1);
+				}
+				else{
+					if (substr($value->getName(), 0, 3)==='Ace' && Session::get('pointCounter')<10)
+						$midAce=true;
+					Session::set('pointCounter', intval(Session::get('pointCounter'))+intval($value->getPoints()));
+				}
 			}
-			else if($res==3){
-				$msg.= 'Bust! You lose';
+			if (Session::get('pointCounter')>21&&$midAce==true) {
+				Session::set('pointCounter', Session::get('pointCounter')-10);
+				$midAce=false;
 			}
-			else if($res==5){
-				$msg.= 'Double bust! Nobody wins';
-			}
-			else{
-				$msg.= 'Dealer bust! You win';
-			}
-			//Database currency calculations go here
+			
+			return Session::get('pointCounter');
+		}
+		public function surrender(){
 			Session::remove('pointCounter');
 			Session::remove('pointCounterAI');
 			Session::remove('hand');
@@ -155,7 +216,5 @@ class Game extends Model{
 			Session::remove('first');
 			Session::set('first', true);
 		}
-		return $msg;
-	}
 }
 ?>

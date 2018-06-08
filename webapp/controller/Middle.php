@@ -15,6 +15,38 @@ class Middle extends BaseController {
 		if (!Session::has('arrayCounter')) {
 			Session::set('arrayCounter', 0);
 		}
+		$this->cardsToDeck();
+		return View::make('Blackjack.GameView');
+	}
+	public function postHandler(){	
+		$game= new Game();	
+		if (Session::get('arrayCounter')>410) {
+			$this->cardsToDeck();
+			Session::set('arrayCounter', 0);
+		}
+		
+		if (Post::has('hit')) {
+			$game->draw_Hit();
+			echo $game->winVerifs('');
+		}
+		else if (Post::has('surrender')) {
+			$game->surrender();
+			echo 'You lose.';
+		}
+		else if (Post::has('stand')) {
+			$game->stand();
+			echo $game->winVerifs('stand');
+		}
+		else if (Post::has('double')) {
+			$game->double();
+			$game->stand();
+			echo $game->winVerifs('stand');
+		}
+		else if (Post::has('split')) {
+			Session::destroy();
+		}
+	}
+	public function cardsToDeck(){
 	$card=array();
 	$card[1]= new Cards("Ace of Spades",11,"Cards/cardSpadesA.png");
 	$card[2]= new Cards("Two of Spades",2,"Cards/cardSpades2.png");
@@ -29,7 +61,6 @@ class Middle extends BaseController {
 	$card[11]= new Cards("Queen of Spades",10,"Cards/cardSpadesQ.png");
 	$card[12]= new Cards("Jack of Spades",10,"Cards/cardSpadesJ.png");
 	$card[13]= new Cards("King of Spades",10,"Cards/cardSpadesK.png");
-
 	$card[14]= new Cards("Ace of Clubs",11,"Cards/cardClubsA.png");
 	$card[15]= new Cards("Two of Clubs",2,"Cards/cardClubs2.png");
 	$card[16]= new Cards("Three of Clubs",3,"Cards/cardClubs3.png");
@@ -43,7 +74,6 @@ class Middle extends BaseController {
 	$card[24]= new Cards("Queen of Clubs",10,"Cards/cardClubsQ.png");
 	$card[25]= new Cards("Jack of Clubs",10,"Cards/cardClubsJ.png");
 	$card[26]= new Cards("King of Clubs",10,"Cards/cardClubsK.png");
-
 	$card[27]= new Cards("Ace of Hearts",11,"Cards/cardHeartsA.png");
 	$card[28]= new Cards("Two of Hearts",2,"Cards/cardHearts2.png");
 	$card[29]= new Cards("Three of Hearts",3,"Cards/cardHearts3.png");
@@ -57,7 +87,6 @@ class Middle extends BaseController {
 	$card[37]= new Cards("Queen of Hearts",10,"Cards/cardHeartsQ.png");
 	$card[38]= new Cards("Jack of Hearts",10,"Cards/cardHeartsJ.png");
 	$card[39]= new Cards("King of Hearts",10,"Cards/cardHeartsK.png");
-
 	$card[40]= new Cards("Ace of Diamonds",11,"Cards/cardDiamondsA.png");
 	$card[41]= new Cards("Two of Diamonds",2,"Cards/cardDiamonds2.png");
 	$card[42]= new Cards("Three of Diamonds",3,"Cards/cardDiamonds3.png");
@@ -71,31 +100,8 @@ class Middle extends BaseController {
 	$card[50]= new Cards("Queen of Diamonds",10,"Cards/cardDiamondsQ.png");
 	$card[51]= new Cards("Jack of Diamonds",10,"Cards/cardDiamondsJ.png");
 	$card[52]= new Cards("King of Diamonds",10,"Cards/cardDiamondsK.png");
-
 	$deck= new Game();
-
 	Session::set('deck', $deck->DeckShuffler($card));
-		return View::make('Blackjack.GameView');
-	}
-	function postHandler(){	
-		$game= new Game();	
-		if (Post::has('hit')) {
-			$deckDraw=$game->Draw();
-			echo $game->winVerifs();
-		}
-		else if (Post::has('surrender')) {
-			Session::destroy();
-		}
-		else if (Post::has('stand')) {
-			Session::destroy();
-		}
-		else if (Post::has('double')) {
-			Session::destroy();
-		}
-		else if (Post::has('split')) {
-			Session::destroy();
-		}
-
 	}
 }
 class Cards{
@@ -103,7 +109,6 @@ class Cards{
 	private $points;
 	private $asset;
 	
-
 	public function __construct($name,$points,$asset){
 		$this->name = $name;
 		$this->points = $points;
@@ -119,5 +124,4 @@ class Cards{
 		return $this->asset;
 	}
 }
-
 ?>
