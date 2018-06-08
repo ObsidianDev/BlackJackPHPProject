@@ -8,16 +8,18 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
+<div id="div1"></div>
+<div id="div2"></div>
 <button id="hit" name="hit">Hit</button>
 <button id="stand" name="stand">Stand</button>
 <button id="double" name="double">Double</button>
 <button id="split" name="split">Split</button>
 <button id="surrender" name="surrender">Surrender</button>
-<div id="div1"></div>
 <script type="text/javascript">
 	$("#hit").click(function(){
 	    $.ajax({url: "game", type: 'post', data:{hit:'true'}, success: function(result){
 	        	$("#div1").html(result);
+
 	    }});
 	});
 	$("#surrender").click(function(){
@@ -26,6 +28,11 @@
 	    }});
 	});
 	$("#stand").click(function(){
+	    $.ajax({url: "game", type: 'post', data:{stand:'true'}, success: function(result){
+	        	$("#div1").html(result);
+	    }});
+	});
+	$("#double").click(function(){
 	    $.ajax({url: "game", type: 'post', data:{stand:'true'}, success: function(result){
 	        	$("#div1").html(result);
 	    }});

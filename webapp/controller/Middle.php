@@ -15,6 +15,39 @@ class Middle extends BaseController {
 		if (!Session::has('arrayCounter')) {
 			Session::set('arrayCounter', 0);
 		}
+		$this->cardsToDeck();
+		return View::make('Blackjack.GameView');
+	}
+	public function postHandler(){	
+		$game= new Game();	
+		if (Session::get('arrayCounter')>410) {
+			$this->cardsToDeck();
+			Session::set('arrayCounter', 0);
+		}
+		
+		if (Post::has('hit')) {
+			$game->draw_Hit();
+			echo $game->winVerifs('');
+		}
+		else if (Post::has('surrender')) {
+			$game->surrender();
+			echo 'You lose.';
+		}
+		else if (Post::has('stand')) {
+			$game->stand();
+			echo $game->winVerifs('stand');
+		}
+		else if (Post::has('double')) {
+			$game->double();
+			$game->stand();
+			echo $game->winVerifs('stand');
+		}
+		else if (Post::has('split')) {
+			Session::destroy();
+		}
+
+	}
+	public function cardsToDeck(){
 	$card=array();
 	$card[1]= new Cards("Ace of Spades",11,"Cards/cardSpadesA.png");
 	$card[2]= new Cards("Two of Spades",2,"Cards/cardSpades2.png");
@@ -75,31 +108,8 @@ class Middle extends BaseController {
 	$deck= new Game();
 
 	Session::set('deck', $deck->DeckShuffler($card));
-		return View::make('Blackjack.GameView');
 	}
-	function postHandler(){	
-		$game= new Game();	
-		if (Post::has('hit')) {
-			$game->draw_Hit();
-			echo $game->winVerifs('');
-		}
-		else if (Post::has('surrender')) {
-			Session::destroy();
-		}
-		else if (Post::has('stand')) {
-			$game->stand();
-			echo $game->winVerifs('stand');
-		}
-		else if (Post::has('double')) {
-			$game->double();
-			$game->stand();
-			echo $game->winVerifs('stand');
-		}
-		else if (Post::has('split')) {
-			Session::destroy();
-		}
 
-	}
 }
 class Cards{
 	private $name;
