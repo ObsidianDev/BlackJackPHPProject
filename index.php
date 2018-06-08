@@ -8,3 +8,5 @@
 
 // @ Import server.rules
 // Goto request.server.mod {0/0}
+
+Redirect::toRoute('home/');
