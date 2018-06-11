@@ -26,7 +26,7 @@ class Middle extends BaseController {
 		}
 		
 		if (Post::has('hit')) {
-			$game->draw_Hit();
+			$game->draws();
 			echo $game->winVerifs('');
 		}
 		else if (Post::has('surrender')) {
@@ -43,7 +43,7 @@ class Middle extends BaseController {
 			echo $game->winVerifs('stand');
 		}
 		else if (Post::has('split')) {
-			Session::destroy();
+			$game->split();
 		}
 	}
 	public function cardsToDeck(){

@@ -32,7 +32,12 @@
 	    }});
 	});
 	$("#double").click(function(){
-	    $.ajax({url: "game", type: 'post', data:{stand:'true'}, success: function(result){
+	    $.ajax({url: "game", type: 'post', data:{double:'true'}, success: function(result){
+	        	$("#div1").html(result);
+	    }});
+	});
+	$("#split").click(function(){
+	    $.ajax({url: "game", type: 'post', data:{split:'true'}, success: function(result){
 	        	$("#div1").html(result);
 	    }});
 	});
