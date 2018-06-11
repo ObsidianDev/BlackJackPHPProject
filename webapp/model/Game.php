@@ -45,9 +45,6 @@ class Game extends Model{
 				}
 				Session::set('first', false);
 			}
-			else if(Session::has('splitHand')){
-
-			}
 			else{
 				for($i=0;$i<2;$i++){
 					if ($i==0) {
@@ -231,6 +228,7 @@ class Game extends Model{
 			Session::remove('totalAI');
 			Session::remove('first');
 			Session::set('first', true);
+
 		}
 
 		public function bet(){
@@ -239,36 +237,6 @@ class Game extends Model{
 
 		public function confirmBet(){
 			//check DB to see if credits are available
-		}
-
-		public function split(){
-			$hand=unserialize(serialize(Session::get('hand')));
-			if (substr($hand[0]->getName(), 0, 5)===substr($hand[1]->getName(), 0, 5) && sizeof($hand)==2) {
-				$splitHand=array();
-				array_push($splitHand, $hand);
-				Session::set('splitHand',$splitHand);
-
-			}
-			else{
-				$countVal=0;
-				foreach (unserialize(serialize(Session::get('handAI'))) as $valueAI) {
-					if($countVal>0){
-						echo '<img src='.Asset::image('Cards/cardBack_red5.png').'>';
-					}
-					else{
-						echo '<img src='.Asset::image($valueAI->getAsset()).'>';
-					}
-					$countVal++;
-				}
-				echo unserialize(serialize(Session::get('handAI')))[0]->getPoints();
-				echo '<br><br><br>';
-				foreach (unserialize(serialize(Session::get('hand'))) as $value) {
-					echo '<img src='.Asset::image($value->getAsset()).'>';
-				}
-				echo Session::get('pointCounter');
-				echo '<script>alert("Not pair");</script>';
-			}
-
 		}
 }
 ?>

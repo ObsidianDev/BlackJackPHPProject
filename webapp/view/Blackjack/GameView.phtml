@@ -13,7 +13,6 @@
 <button id="hit" name="hit">Hit</button>
 <button id="stand" name="stand">Stand</button>
 <button id="double" name="double">Double</button>
-<button id="split" name="split">Split</button>
 <button id="surrender" name="surrender">Surrender</button>
 <script type="text/javascript">
 	$("#hit").click(function(){
@@ -23,7 +22,7 @@
 	});
 	$("#surrender").click(function(){
 	    $.ajax({url: "game", type: 'post', data:{surrender:'true'}, success: function(){
-	        	$("#div1").html('');
+	        	$("#div1").html('You lose.');
 	    }});
 	});
 	$("#stand").click(function(){
@@ -33,11 +32,6 @@
 	});
 	$("#double").click(function(){
 	    $.ajax({url: "game", type: 'post', data:{double:'true'}, success: function(result){
-	        	$("#div1").html(result);
-	    }});
-	});
-	$("#split").click(function(){
-	    $.ajax({url: "game", type: 'post', data:{split:'true'}, success: function(result){
 	        	$("#div1").html(result);
 	    }});
 	});
