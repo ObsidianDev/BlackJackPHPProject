@@ -42,8 +42,15 @@ class Middle extends BaseController {
 			$game->stand();
 			echo $game->winVerifs('stand');
 		}
-		else if (Post::has('split')) {
-			$game->split();
+		else if (Post::has('confirmBet')) {
+			$dbOperation=new DBWork();
+			Session::set('username','jnkpf');
+			Session::set('userID','1');
+			$playValidation= $dbOperation->confirmBet(Post::get('confirmBet'));
+			if ($playValidation==1) {
+				$game->draws();
+				echo $game->winVerifs('');
+			}
 		}
 	}
 	public function cardsToDeck(){
