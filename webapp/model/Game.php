@@ -67,6 +67,7 @@ class Game extends Model{
 			$this->pointCount();
 		}
 		public function winVerifs($case){
+			echo "Current Balance: ".Session::get('currentBalance')."<br>";
 			$res=0;$msg='';
 			 if (Session::get('totalAI')>Session::get('pointCounter') && Session::get('totalAI') < 22  && $case==='stand') {
 				$res=6;
@@ -103,6 +104,7 @@ class Game extends Model{
 			}
 			
 			if($res !=0){
+				$dbOperation=new DBWork();
 				$msg='<br>';
 				foreach (unserialize(serialize(Session::get('handAI'))) as $valueAI) {
 					echo '<img src='.Asset::image($valueAI->getAsset()).'>';
@@ -115,9 +117,11 @@ class Game extends Model{
 				echo Session::get('pointCounter');
 				if($res==1){
 					$msg.= 'Blackjack! You win';
+					$dbOperation->historyUpdate('blackjack', Session::get('currentBet'), Session::get('currentBalance'));
 				}
 				else if($res==2){
 					$msg.= 'Oof. Dealer blackjack! You lose';
+					$dbOperation->historyUpdate('blackjackLoss', Session::get('currentBet'), Session::get('currentBalance'));
 				}
 				else if($res==3){
 					$msg.= 'Bust! You lose';
@@ -127,12 +131,14 @@ class Game extends Model{
 				}
 				else if($res==7){
 					$msg.= 'You win.';
+					$dbOperation->historyUpdate('win', Session::get('currentBet'), Session::get('currentBalance'));
 				}
 				else if($res==8){
 					$msg.= 'Tie.';
 				}
 				else if ($res==4){
 					$msg.= 'Dealer bust! You win';
+					$dbOperation->historyUpdate('win', Session::get('currentBet'), Session::get('currentBalance'));
 				}
 				$this->surrender();
 			}
@@ -163,6 +169,15 @@ class Game extends Model{
 				array_push($handAI, $deck[Session::get('arrayCounter')]);
 				Session::set('handAI',$handAI);
 				Session::set('totalAI', Session::get('totalAI')+intval($deck[Session::get('arrayCounter')]->getPoints()));
+				$midAceAI=false;
+				foreach ($handAI as $valueAI) {
+					if (substr($valueAI->getName(), 0, 3)==='Ace' && Session::get('totalAI')<21) 
+						$midAceAI=true;
+				}
+				if (Session::get('totalAI')>21&&$midAceAI==true) {
+					Session::set('totalAI', Session::get('totalAI')-10);
+					$midAceAI=false;
+				}
 				unset($deck[Session::get('arrayCounter')]);
 				Session::set('deck',$deck);
 				Session::set('arrayCounter', Session::get('arrayCounter')+1);
@@ -176,10 +191,10 @@ class Game extends Model{
 			unset($deck[Session::get('arrayCounter')]);
 			Session::set('deck',$deck);
 			Session::set('arrayCounter', Session::get('arrayCounter')+1);
+			Session::set('currentBet', Session::get('currentBet')*2);
 			Session::set('pointCounter',0);	
 			Session::set('pointCounterAI',0);
 			$this->pointCount();
-			//double current bet
 			
 		}
 		public function pointCount()
@@ -192,7 +207,7 @@ class Game extends Model{
 				}
 				else{
 					if (Session::has('totalAI')) {
-						if (substr($valueAI->getName(), 0, 3)==='Ace' && Session::get('totalAI')<10) 
+						if (substr($valueAI->getName(), 0, 3)==='Ace' && Session::get('totalAI')<21) 
 							$midAceAI=true;
 					}
 					Session::set('pointCounterAI', intval(Session::get('pointCounterAI'))+intval($valueAI->getPoints()));
@@ -227,16 +242,10 @@ class Game extends Model{
 			Session::remove('handAI');
 			Session::remove('totalAI');
 			Session::remove('first');
+			Session::remove('currentBet');
+			Session::remove('currentBalance');
 			Session::set('first', true);
 
-		}
-
-		public function bet(){
-			//add value to current bet
-		}
-
-		public function confirmBet(){
-			//check DB to see if credits are available
 		}
 }
 ?>

@@ -14,14 +14,19 @@
 <button id="stand" name="stand">Stand</button>
 <button id="double" name="double">Double</button>
 <button id="surrender" name="surrender">Surrender</button>
-<input style="margin-left: 50px" type="text" id="betValue">
+<input style="margin-left: 50px" type="number" id="betValue">
 <button id="testbet" name="testbet">Bet</button>
-<p id="currBalance"></p>
+
 <div id="div2"></div>
 <script type="text/javascript">
 	$("#hit").click(function(){
 	    $.ajax({url: "game", type: 'post', data:{hit:'true'}, success: function(result){
+	    	if(result.trim()!==''){
 	        	$("#div1").html(result);
+	        }
+	        else{
+	        	alert('Place a bet first.');
+	        }
 	    }});
 	});
 	$("#surrender").click(function(){
@@ -31,18 +36,33 @@
 	});
 	$("#stand").click(function(){
 	    $.ajax({url: "game", type: 'post', data:{stand:'true'}, success: function(result){
+	    	if(result.trim()!==''){
 	        	$("#div1").html(result);
+	        }
+	        else{
+	        	alert('Place a bet first.');
+	        }
 	    }});
 	});
 	$("#double").click(function(){
 	    $.ajax({url: "game", type: 'post', data:{double:'true'}, success: function(result){
+	    	if(result.trim()!==''){
 	        	$("#div1").html(result);
+	        }
+	        else{
+	        	alert('Place a bet first.');
+	        }
 	    }});
 	});
 	$("#testbet").click(function(){
 		if ($('#betValue').val()>4) {
-		    $.ajax({url: "game", type: 'post', data:{confirmBet:$('#betValue').val()}, success: function(result){
-		        	$("#div1").html(result);
+		    $.ajax({url: "game", type: 'post', data:{confirmBet:Math.round($('#betValue').val())}, success: function(result){
+		    	if(result.trim()!==''){
+		        	$("#div1").html(result);	
+		    	}
+		    	else{
+		    		alert("There's a bet in place already.");
+		    	}
 		    }});
 		}
 		else{

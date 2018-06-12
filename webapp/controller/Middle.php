@@ -20,36 +20,48 @@ class Middle extends BaseController {
 	}
 	public function postHandler(){	
 		$game= new Game();	
+		$dbOperation=new DBWork();
 		if (Session::get('arrayCounter')>410) {
 			$this->cardsToDeck();
 			Session::set('arrayCounter', 0);
 		}
 		
 		if (Post::has('hit')) {
-			$game->draws();
-			echo $game->winVerifs('');
-		}
-		else if (Post::has('surrender')) {
-			$game->surrender();
-			echo 'You lose.';
-		}
-		else if (Post::has('stand')) {
-			$game->stand();
-			echo $game->winVerifs('stand');
-		}
-		else if (Post::has('double')) {
-			$game->double();
-			$game->stand();
-			echo $game->winVerifs('stand');
-		}
-		else if (Post::has('confirmBet')) {
-			$dbOperation=new DBWork();
-			Session::set('username','jnkpf');
-			Session::set('userID','1');
-			$playValidation= $dbOperation->confirmBet(Post::get('confirmBet'));
-			if ($playValidation==1) {
+			if(Session::has('currentBet')){
 				$game->draws();
 				echo $game->winVerifs('');
+			}
+		}
+		else if (Post::has('surrender')) {
+			if(Session::has('currentBet')){
+				
+				$dbOperation->historyUpdate('surrender',Session::get('currentBet'), Session::get('currentBalance'));
+				$game->surrender();
+				echo 'You lose.';
+			}
+		}
+		else if (Post::has('stand')) {
+			if(Session::has('currentBet')){
+				$game->stand();
+				echo $game->winVerifs('stand');
+			}
+		}
+		else if (Post::has('double')) {
+			if(Session::has('currentBet')){
+				$game->double();
+				$game->stand();
+				echo $game->winVerifs('stand');
+			}
+		}
+		else if (Post::has('confirmBet')) {
+			if(!Session::has('currentBet')){
+				Session::set('username','jnkpf');
+				Session::set('userID','1');
+				$playValidation= $dbOperation->confirmBet(Post::get('confirmBet'));
+				if ($playValidation==1) {
+					$game->draws();
+					echo $game->winVerifs('');
+				}
 			}
 		}
 	}
