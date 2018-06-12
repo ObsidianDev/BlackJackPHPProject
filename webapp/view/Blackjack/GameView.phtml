@@ -14,7 +14,7 @@
 <button id="stand" name="stand">Stand</button>
 <button id="double" name="double">Double</button>
 <button id="surrender" name="surrender">Surrender</button>
-<input style="margin-left: 50px" type="number" id="betValue">
+<input placeholder="Minimum bet: 5" style="margin-left: 50px" type="number" id="betValue">
 <button id="testbet" name="testbet">Bet</button>
 
 <div id="div2"></div>
@@ -26,6 +26,13 @@
 	        }
 	        else{
 	        	alert('Place a bet first.');
+	        }
+	    }});
+	});
+	$(document).ready(function(){
+	    $.ajax({url: "game", type: 'post', data:{start:'true'}, success: function(result){
+	    	if(result.trim()!==''){
+	        	$("#div1").html(result);
 	        }
 	    }});
 	});

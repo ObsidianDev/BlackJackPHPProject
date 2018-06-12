@@ -46,6 +46,11 @@ class Middle extends BaseController {
 				echo $game->winVerifs('stand');
 			}
 		}
+		else if (Post::has('start')) {
+			if(Session::has('hand')){
+				$game->winVerifs('');
+			}
+		}
 		else if (Post::has('double')) {
 			if(Session::has('currentBet')){
 				$game->double();
