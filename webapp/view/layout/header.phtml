@@ -2,6 +2,9 @@
 use ArmoredCore\WebObjects\Asset;
 use ArmoredCore\Facades\AssetBundler;
 use ArmoredCore\WebObjects\URL;
+use ArmoredCore\WebObjects\Session;
+use ArmoredCore\WebObjects\Layout;
+Layout::includeLayout('modalLogin');
 ?>
 
 <!DOCTYPE html>
@@ -14,46 +17,51 @@ use ArmoredCore\WebObjects\URL;
     <title>BlackJack</title>
 
     <?=AssetBundler::css()?>
-    <link rel="shortcut icon" href="<?= Asset::image('gt_favicon.png')?>">
+    <link rel="shortcut icon" href="<?= Asset::image('icon.png')?>">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700"  media="screen">
-    <link rel="stylesheet" href="<?= Asset::css('/bootstrap.min.css')?>" media="screen" >
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link rel="stylesheet" href="<?= Asset::css('/bootstrap/bootstrap.min.css')?>" media="screen" >
+    <link rel="stylesheet" href="<?= Asset::css('/main.css')?>" media="screen" >
+    <link rel="stylesheet" href="<?= Asset::css('/wobblyslideshoweffect/normalize.css')?>" media="screen" >
+    <link rel="stylesheet" href="<?= Asset::css('/wobblyslideshoweffect/slideshow.css')?>" media="screen" >
     <script src="<?= Asset::js('/jquery-3.3.1.min')?>"></script>
-    <script src="<?= Asset::js('/bootstrap.min.js')?>"></script>
+    <script src="<?= Asset::js('/bootstrap/bootstrap.min.js')?>"></script>
+    <script src="<?= Asset::js('/bootstrap/bootstrap.bundle.min.js')?>"></script>
+    <script src="<?= Asset::js('/wobblyslideshoweffect/snap.svg-min.js')?>"></script>
+    <script src="<?= Asset::js('/wobblyslideshoweffect/modernizr.custom.js')?>"></script>
+    <script src="<?= Asset::js('/wobblyslideshoweffect/classie.js')?>"></script>
+    <script src="<?= Asset::js('/wobblyslideshoweffect/sliderFx.js')?>"></script>    
 </head>
 
-<body>
+<body style="background-image: url(<?php echo Asset::image('main-background.jpg') ?>); background-attachment: fixed;background-position: center;background-repeat: no-repeat;background-size: cover;">
     <!-- start navbar--> 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand" href="#">Navbar</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="<?=URL::toRoute('home/')?>"><img src="<?= Asset::image('icon.png')?>" width="30" height="30" class="d-inline-block align-top" alt=""></a>
 	  	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 	    	<span class="navbar-toggler-icon"></span>
 	  	</button>
 
 	  	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 	    	<ul class="navbar-nav mr-auto">
-    			<li class="nav-item active">
-	        		<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+    			  <li id="navhome" class="nav-item">
+	        		<a class="nav-link" href="<?=URL::toRoute('home/')?>">Home</a>
 	      		</li>
-	      		<li class="nav-item">
-	        		<a class="nav-link" href="#">Link</a>
-      			</li>
-	      		<li class="nav-item dropdown">
-	        		<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-        			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-	          			<a class="dropdown-item" href="#">Action</a>
-	          			<a class="dropdown-item" href="#">Another action</a>
-	          			<div class="dropdown-divider"></div>
-	          			<a class="dropdown-item" href="#">Something else here</a>
-        			</div>
-	      		</li>
-	    	  	<li class="nav-item">
-	        		<a class="nav-link disabled" href="#">Disabled</a>
-	      		</li>
+	      		<?php 
+	      			if(Session::has('user'))
+      					echo "<li id='navprofile' class='nav-item'><a class='nav-link' href='". URL::toRoute('plano/index') ."''>Profile</a></li>";
+	      		?>
+	      		<li id="navjacktop" class="nav-item">
+	        		<a class="nav-link" href="<?=URL::toRoute('plano/index')?>">Jacktop 10</a>
+      			</li>	
 	    	</ul>
-	    	<form class="form-inline my-2 my-lg-0">
-      			<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-	    	</form>
+	    	<?php 
+      			if(Session::has('user'))
+  					  echo "<button class='btn btn-outline-secondary my-2 my-sm-0' type='submit'>Play</button>".
+  					       "<a class='btn btn-link' href='". URL::toRoute('plano/index') ."'> <i class='fas fa-power-off'></i></a>";
+				    else
+					    echo "<button class='btn btn-outline-secondary my-2 my-sm-0 disabled' type='submit'>Play</button>".
+                   "<a id='showLogin' class='btn btn-link' href='#login'> <i class='fas fa-power-off'></i></a>";
+      	?>  			 
 	  	</div>
 	</nav>
 	<!-- end navbar--> 

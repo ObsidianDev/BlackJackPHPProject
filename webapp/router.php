@@ -15,9 +15,9 @@ use ArmoredCore\Facades\Router;
 Router::get('/',				'HomeController/index');
 Router::get('home/',			'HomeController/index');
 Router::get('home/index',		'HomeController/index');
-Router::get('home/start',		'HomeController/start');
-Router::get('login/',			'LoginController/index');
-Router::post('login/',			'LoginController/login');
+Router::get('index/',		    'HomeController/index');
+Router::post('login/',			'HomeController/login');
+Router::post('register/',	    'HomeController/register');
 Router::get('game/',			'Middle/start');
 Router::post('game/',			'Middle/postHandler');
 

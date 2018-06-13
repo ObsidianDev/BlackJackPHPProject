@@ -2,14 +2,9 @@
 use ArmoredCore\Controllers\BaseController;
 use ArmoredCore\WebObjects\Redirect;
 use ArmoredCore\WebObjects\Session;
+use ArmoredCore\WebObjects\Post;
 use ArmoredCore\WebObjects\View;
 
-/**
- * Created by PhpStorm.
- * User: smendes
- * Date: 09-05-2016
- * Time: 11:30
- */
 class HomeController extends BaseController
 {
 
@@ -17,20 +12,32 @@ class HomeController extends BaseController
         return View::make('home.index');
     }
 
-    public function start(){
-        //View::attachSubView('titlecontainer', 'layout.pagetitle', ['title' => 'Quick Start']);
-        return View::make('home.start');
-    }
-     public function login(){
+    public function login(){
 
     	$dados = Post::getAll();
 
-    	//verificar se utilizador existe na bd
-    	Session::set('username',$dados['username']);
-    	Session::set('password',$dados['password']);
+    	echo "teste";
+
+        //verificar se utilizador existe na bd
+    	//Session::set('email',$dados['email']);
+    	//Session::set('password',$dados['password']);
 
 		
     	
+    }
+
+     public function register(){
+
+        $dados = Post::getAll();
+
+        echo "teste";
+
+        //verificar se utilizador existe na bd
+        //Session::set('email',$dados['email']);
+        //Session::set('password',$dados['password']);
+
+        
+        
     }
 
 }

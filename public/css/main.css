@@ -1,0 +1,53 @@
+footer{
+	color:white;
+	background-color: #343A40;
+}
+
+a{
+	text-decoration: none!important;
+} 
+
+a:link{
+	color: grey;
+}
+
+a:visited{
+	color: grey;
+}
+
+ a:hover{
+	color:white;
+}
+
+a:active{
+	color:white;
+}
+
+#main, .footer-copyright{
+	margin-top: 2%;
+}
+
+#slideshow{
+	width: 100%;
+	height: 600px;
+}
+
+li path {
+  fill: rgba(43, 43, 43, 0.90);
+}
+
+.slide{
+	color:white;
+}
+
+.slide button{
+	font-size:150%;
+}
+
+.slide img{
+	height: 300px;
+}
+
+.slide .row .col-lg-12{
+	margin-top:20px;
+}
