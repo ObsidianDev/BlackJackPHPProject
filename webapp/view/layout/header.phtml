@@ -57,10 +57,10 @@ Layout::includeLayout('modalLogin');
 	    	<?php 
       			if(Session::has('username'))
   					  echo "<button class='btn btn-outline-secondary my-2 my-sm-0' type='submit'>Play</button>".
-  					       "<a class='btn btn-link' href='". URL::toRoute('plano/index') ."'> <i class='fas fa-power-off'></i></a>";
+  					       "<a class='btn btn-link' href='". URL::toRoute('logout/') ."'> <i class='fas fa-power-off'></i></a>";
 				    else
-					    echo "<button class='btn btn-outline-secondary my-2 my-sm-0 disabled' type='submit'>Play</button>".
-                   "<a id='showLogin' class='btn btn-link' href='#login'> <i class='fas fa-power-off'></i></a>";
+					    echo "<button style='cursor: pointer;' class='btn btn-outline-secondary my-2 my-sm-0 disabled' type='submit'>Play</button>".
+                   "<a id='showLogin' class='btn btn-link'> <i class='fas fa-power-off'></i></a>";
       	?>  			 
 	  	</div>
 	</nav>

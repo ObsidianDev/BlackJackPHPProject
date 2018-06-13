@@ -2,7 +2,7 @@
   use ArmoredCore\WebObjects\Data;
 ?> 
 <?php 
-  if(Data::get('userNotFound') == null) 
+  if(Data::get('userNotFound') == null && Data::get('userexists') == null) 
     echo "<div class='modal fade hiding' id='modalLogin' tabindex='-1' role='dialog' aria-hidden='true'>"; 
   else 
     echo "<div class='modal fade showing' id='modalLogin' tabindex='-1' role='dialog' aria-hidden='true'>"; 
@@ -27,7 +27,7 @@
                 </button>
               </h5>
             </div>
-            <div id="collapseLogin" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div id="collapseLogin" <?php if(Data::get('userNotFound') == null && Data::get('userexists') == null || Data::get('userNotFound') != null) echo "class='collapse show'"; else echo "class='collapse'"; ?>  aria-labelledby="headingOne" data-parent="#accordion">
               <div class="card-body">
 
 
@@ -39,7 +39,7 @@
                   </div>
                   <div class="form-group">
                     <label>Password</label>
-                    <input <?php if(Data::get('userNotFound') != null) echo "value='".Data::get('userNotFound')->password."'"; ?> name="password" type="password" class="form-control" placeholder="Password" required="Insert your password">
+                    <input <?php if(Data::get('userNotFound') != null) echo "value='".Data::get('userNotFound')->password."'"; ?> name="password" type="password" class="form-control" placeholder="Confirmation" required="Insert your password">
                   </div>
                   <?php 
                     if(Data::get('userNotFound') != null)
@@ -67,36 +67,45 @@
                 </button>
               </h5>
             </div>
-            <div id="collapseRegister" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div id="collapseRegister" <?php if(Data::get('userexists') != null) echo "class='collapse show'"; else echo "class='collapse'"; ?> aria-labelledby="headingTwo" data-parent="#accordion">
               <div class="card-body">
 
 
                 <form action="register/" method="POST">
+                  <?php 
+                    if(Data::get('userexists') != null)
+                      echo 
+                      "<div class='form-group'>".
+                        "<div class='alert alert-warning' role='alert'>".
+                          Data::get('userexists')->errors.
+                        "</div>".
+                      "</div>";
+                  ?>                  
                   <div class="form-group">
                     <label>Full Name</label>
-                    <input name="name" type="text" class="form-control" required="Inset your full name">
+                    <input <?php if(Data::get('userexists') != null) echo "value='".Data::get('userexists')->name."'"; ?> name="name" type="text" class="form-control" required="Insert your full name">
                   </div>
                   <div class="form-group">
                     <label>Birthdate</label>
-                    <input name="birthdate" type="date" class="form-control">
+                    <input <?php if(Data::get('userexists') != null) echo "value='".Data::get('userexists')->birthdate->format('Y-m-d')."'"; ?> name="birthdate" type="date" class="form-control">
                   </div>
                   <div class="form-group">
                     <label>Email address</label>
-                    <input name="email" type="email" class="form-control" placeholder="Enter email" required="Insert your email">
+                    <input <?php if(Data::get('userexists') != null) echo "value='".Data::get('userexists')->email."'"; ?> name="email" type="email" class="form-control" placeholder="Enter email" required="Insert your email">
                     <small id="emailHelp" class="form-text text-muted">Ex: example@gmail.com</small>
                   </div>
                   <div class="form-group">
                     <label>Username</label>
-                    <input name="username" type="text" class="form-control">
+                    <input <?php if(Data::get('userexists') != null) echo "value='".Data::get('userexists')->username."'"; ?> name="username" type="text" class="form-control">
                   </div>
                   <div class="form-group">
                     <label>Password</label>
-                    <input name="password" type="password" class="form-control" placeholder="Password" required="Insert you password">
+                    <input <?php if(Data::get('userexists') != null) echo "value='".Data::get('userexists')->password."'"; ?> name="password" type="password" class="form-control" placeholder="Password" required="Insert you password">
                   </div>
                   <div class="form-group">
                     <label>Password Confirmation</label>
                     <input name="passwordConfirmation" type="password" class="form-control" placeholder="Password" required="Confirm your password">
-                  </div>
+                  </div>                  
                   <button type="submit" class="btn btn-primary">Register</button>
                 </form>
 

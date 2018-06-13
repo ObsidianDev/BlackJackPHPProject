@@ -8,48 +8,63 @@ use ArmoredCore\WebObjects\View;
 class HomeController extends BaseController
 {
     public function index(){
-        Session::destroy();
-        return View::make('home.index',['userNotFound' => null]);
+        
+        return View::make('home.index',['userNotFound' => null, 'userexists' => null]);
     }
 
     public function login(){
 
     	$loginData = Post::getAll();
         $userFound = User::find(array('conditions' => array('email=? and password=?', $loginData['email'], $loginData['password'])));
-        if($userFound != null)
+        if($userFound != null)//login com sucesso
         {
             Session::set('username',$userFound->username);
             Session::set('userID',$userFound->id);
-            $this->index();
+            Redirect::toRoute('home/');        
         }
-        else{
+        else
+        {//login invalido
             $userNotFound = new User();
             $userNotFound->errors = 'Invalid login. Check you email and password and try again.';
             $userNotFound->email = $loginData['email'];
             $userNotFound->password = $loginData['password'];
-            View::make('home.index', ['userNotFound' => $userNotFound]);
+            View::make('home.index', ['userNotFound' => $userNotFound, 'userexists' => null]);
         }	
     }
 
-     public function register(){
+    public function register(){
 
-        $dados = Post::getAll();
+        $registrationData = Post::getAll();
+        $attributes = array('username' =>  $registrationData['username'], 'password' =>  $registrationData['password'], 'blocked' => 0, 'email' =>  $registrationData['email'], 'birthdate' =>  $registrationData['birthdate'], 'name' => $registrationData['name'], 'balance' => 1000, 'role' => 0);
 
-        $loginData = Post::getAll();
-        $userFound = User::find(array('conditions' => array('email=? and password=?', $loginData['email'], $loginData['password'])));
-        if($userFound != null)
-        {
-            Session::set('username',$userFound->username);
-            Session::set('userID',$userFound->id);
-            $this->index();
+        $exists = User::exists(array('conditions' => array('email=? or username=?', $registrationData['email'], $registrationData['username'])));
+        $user = new User($attributes);
+        
+        //verificar se passes sao iguais
+        if($registrationData['passwordConfirmation'] !=  $registrationData['password']){
+            $user->errors = 'Password and Password confirmation dont match. Try again.';
+            View::make('home.index', ['userNotFound' => null, 'userexists' => $user]);
         }
-        else{
-            $userNotFound = new User();
-            $userNotFound->errors = 'Invalid login. Check you email and password and try again.';
-            $userNotFound->email = $loginData['email'];
-            $userNotFound->password = $loginData['password'];
-            View::make('home.index', ['userNotFound' => $userNotFound]);
-        }   
+        else if($exists == true){
+            $user->errors = 'The email or the username were already taken. Try another one.';
+            View::make('home.index', ['userNotFound' => null, 'userexists' => $user]);
+        }
+        else if($exists == false)
+        {//registo com sucesso
+
+            //guardar user
+            $userCreated = User::create($attributes);
+
+            //criar sussesao
+            Session::set('username',$registrationData['username']);
+            Session::set('userID',$userCreated->id);
+            Redirect::toRoute('home/');
+        }
+    }
+
+    public function logout(){
+        Session::destroy();
+        Redirect::toRoute('home/');
     }
 
 }
