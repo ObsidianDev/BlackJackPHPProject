@@ -7,37 +7,49 @@ use ArmoredCore\WebObjects\View;
 
 class HomeController extends BaseController
 {
-
     public function index(){
-        return View::make('home.index');
+        Session::destroy();
+        return View::make('home.index',['userNotFound' => null]);
     }
 
     public function login(){
 
-    	$dados = Post::getAll();
-
-    	echo "teste";
-
-        //verificar se utilizador existe na bd
-    	//Session::set('email',$dados['email']);
-    	//Session::set('password',$dados['password']);
-
-		
-    	
+    	$loginData = Post::getAll();
+        $userFound = User::find(array('conditions' => array('email=? and password=?', $loginData['email'], $loginData['password'])));
+        if($userFound != null)
+        {
+            Session::set('username',$userFound->username);
+            Session::set('userID',$userFound->id);
+            $this->index();
+        }
+        else{
+            $userNotFound = new User();
+            $userNotFound->errors = 'Invalid login. Check you email and password and try again.';
+            $userNotFound->email = $loginData['email'];
+            $userNotFound->password = $loginData['password'];
+            View::make('home.index', ['userNotFound' => $userNotFound]);
+        }	
     }
 
      public function register(){
 
         $dados = Post::getAll();
 
-        echo "teste";
-
-        //verificar se utilizador existe na bd
-        //Session::set('email',$dados['email']);
-        //Session::set('password',$dados['password']);
-
-        
-        
+        $loginData = Post::getAll();
+        $userFound = User::find(array('conditions' => array('email=? and password=?', $loginData['email'], $loginData['password'])));
+        if($userFound != null)
+        {
+            Session::set('username',$userFound->username);
+            Session::set('userID',$userFound->id);
+            $this->index();
+        }
+        else{
+            $userNotFound = new User();
+            $userNotFound->errors = 'Invalid login. Check you email and password and try again.';
+            $userNotFound->email = $loginData['email'];
+            $userNotFound->password = $loginData['password'];
+            View::make('home.index', ['userNotFound' => $userNotFound]);
+        }   
     }
 
 }

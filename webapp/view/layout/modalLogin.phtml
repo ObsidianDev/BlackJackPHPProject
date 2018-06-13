@@ -1,4 +1,12 @@
-<div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-hidden="true">
+<?php
+  use ArmoredCore\WebObjects\Data;
+?> 
+<?php 
+  if(Data::get('userNotFound') == null) 
+    echo "<div class='modal fade hiding' id='modalLogin' tabindex='-1' role='dialog' aria-hidden='true'>"; 
+  else 
+    echo "<div class='modal fade showing' id='modalLogin' tabindex='-1' role='dialog' aria-hidden='true'>"; 
+?>
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -26,13 +34,22 @@
                 <form action="login/" method="POST">
                   <div class="form-group">
                     <label>Email address</label>
-                    <input name="email" type="email" class="form-control" placeholder="Enter email">
+                    <input <?php if(Data::get('userNotFound') != null) echo "value='".Data::get('userNotFound')->email."'"; ?> name="email" type="email" class="form-control" placeholder="Enter email" required="Insert your email">
                     <small id="emailHelp" class="form-text text-muted">Ex: example@gmail.com</small>
                   </div>
                   <div class="form-group">
                     <label>Password</label>
-                    <input name="password" type="password" class="form-control" placeholder="Password">
+                    <input <?php if(Data::get('userNotFound') != null) echo "value='".Data::get('userNotFound')->password."'"; ?> name="password" type="password" class="form-control" placeholder="Password" required="Insert your password">
                   </div>
+                  <?php 
+                    if(Data::get('userNotFound') != null)
+                      echo 
+                      "<div class='form-group'>".
+                        "<div class='alert alert-warning' role='alert'>".
+                          Data::get('userNotFound')->errors.
+                        "</div>".
+                      "</div>";
+                  ?>
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
 
@@ -40,8 +57,6 @@
               </div>
             </div>
           </div>
-
-
 
 
           <div class="card">
@@ -59,7 +74,7 @@
                 <form action="register/" method="POST">
                   <div class="form-group">
                     <label>Full Name</label>
-                    <input name="name" type="text" class="form-control">
+                    <input name="name" type="text" class="form-control" required="Inset your full name">
                   </div>
                   <div class="form-group">
                     <label>Birthdate</label>
@@ -67,7 +82,7 @@
                   </div>
                   <div class="form-group">
                     <label>Email address</label>
-                    <input name="email" type="email" class="form-control" placeholder="Enter email">
+                    <input name="email" type="email" class="form-control" placeholder="Enter email" required="Insert your email">
                     <small id="emailHelp" class="form-text text-muted">Ex: example@gmail.com</small>
                   </div>
                   <div class="form-group">
@@ -76,11 +91,11 @@
                   </div>
                   <div class="form-group">
                     <label>Password</label>
-                    <input name="password" type="password" class="form-control" placeholder="Password">
+                    <input name="password" type="password" class="form-control" placeholder="Password" required="Insert you password">
                   </div>
                   <div class="form-group">
                     <label>Password Confirmation</label>
-                    <input name="passwordConfirmation" type="password" class="form-control" placeholder="Password">
+                    <input name="passwordConfirmation" type="password" class="form-control" placeholder="Password" required="Confirm your password">
                   </div>
                   <button type="submit" class="btn btn-primary">Register</button>
                 </form>

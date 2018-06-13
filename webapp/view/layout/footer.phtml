@@ -28,7 +28,7 @@ use ArmoredCore\WebObjects\Session;
 			        	<a href="<?=URL::toRoute('home/')?>">Home</a>
 			        </li>
 			        <?php 
-		      			if(Session::has('user'))
+		      			if(Session::has('username'))
 	      					echo "<li><a href='". URL::toRoute('plano/index') ."''>Profile</a></li>";
 		      		?>
 			        <li>

@@ -47,7 +47,7 @@ Layout::includeLayout('modalLogin');
 	        		<a class="nav-link" href="<?=URL::toRoute('home/')?>">Home</a>
 	      		</li>
 	      		<?php 
-	      			if(Session::has('user'))
+	      			if(Session::has('username'))
       					echo "<li id='navprofile' class='nav-item'><a class='nav-link' href='". URL::toRoute('plano/index') ."''>Profile</a></li>";
 	      		?>
 	      		<li id="navjacktop" class="nav-item">
@@ -55,7 +55,7 @@ Layout::includeLayout('modalLogin');
       			</li>	
 	    	</ul>
 	    	<?php 
-      			if(Session::has('user'))
+      			if(Session::has('username'))
   					  echo "<button class='btn btn-outline-secondary my-2 my-sm-0' type='submit'>Play</button>".
   					       "<a class='btn btn-link' href='". URL::toRoute('plano/index') ."'> <i class='fas fa-power-off'></i></a>";
 				    else
