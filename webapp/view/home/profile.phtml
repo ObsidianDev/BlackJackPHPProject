@@ -24,21 +24,21 @@ Layout::includeLayout('header'); ?>
 			  	<div class="d-flex w-100 justify-content-between">
 			    	<strong class="mb-1">Full Name:</strong>
 			      	<input <?php echo "value='".Data::get('currentUser')->name."'"; ?> name="name" type="text" class="form-control" placeholder="Enter your name" required="Insert your name" disabled>
-			      	<button id="btnEditname" type="button"><i class="fas fa-edit"></i></button>
+			      	<button class="edit" id="name" type="button"><i class="fas fa-edit"></i></button>
 			    </div>
 		    </li>
-		    <li class="list-group-item list-group-item-secondary">
+		    <li class="list-group-item list-group-item-secondary editEmailDiv">
 			  	<div class="d-flex w-100 justify-content-between">
 			    	<strong class="mb-1">Email:</strong>
 			      	<input <?php echo "value='".Data::get('currentUser')->email."'"; ?> name="email" type="email" class="form-control" placeholder="Enter email" required="Insert your email" disabled>
-			      	<button id="btnEditemail" type="button"><i class="fas fa-edit"></i></button>
+			      	<button class="edit" id="email" type="button"><i class="fas fa-edit"></i></button>
 			    </div>
 		    </li>
 		    <li class="list-group-item list-group-item-secondary">
 			  	<div class="d-flex w-100 justify-content-between">
 			    	<strong class="mb-1">Birthdate:</strong>
-			      	<input <?php echo "value='".Data::get('currentUser')->birthdate->format('Y-m-d')."'"; ?> name="birthdate" type="date" class="form-control" required="Insert your birthdate" disabled>
-			      	<button id="btnEditbirthdate" type="button"><i class="fas fa-edit"></i></button>
+			      	<input min="1950-01-01" max="2017-01-01" <?php echo "value='".Data::get('currentUser')->birthdate->format('Y-m-d')."'"; ?> name="birthdate" type="date" class="form-control" required="Insert your birthdate" disabled>
+			      	<button class="edit" id="birthdate" type="button"><i class="fas fa-edit"></i></button>
 			    </div>
 		    </li>
 		    <li class="list-group-item list-group-item-secondary">
@@ -46,8 +46,8 @@ Layout::includeLayout('header'); ?>
 			    	<strong class="mb-1">Password:</strong>
 			      	<input <?php echo "value='".Data::get('currentUser')->password."'"; ?> name="password" type="password" class="form-control" placeholder="Enter password" required="Insert your password" disabled>
 			      	<div class="row">
-			      		<div class="col"><button id="btnEditpassword" type="button"><i class="fas fa-edit"></i></button></div>
-			      		<div class="col"><button id="btnViewPassword" type="button"><i class="fas fa-edit"></i></button></div>
+			      		<div class="col"><button class="edit" id="password" type="button"><i class="fas fa-edit"></i></button></div>
+			      		<div class="col"><button id="btnViewPassword" type="button"><i class="fas fa-eye"></i></button></div>
 			      	</div>
 			    </div>
 		    </li>
@@ -58,8 +58,8 @@ Layout::includeLayout('header'); ?>
 		<div id="creditSection" class="row mx-auto">
 			<div class="col align-self-center"><h3>Credit: <?php echo Data::get('currentUser')->balance ?></h3></div>
   			<div class="col">
-  				<div class="row"><input name="addCredit" placeholder="€ 0.00" min="0" step="0.01" title="Currency" type="number" class="form-control"></div>
-  				<div style="margin-top: 7px;" class="row"><button type="button" class="btn btn-success btn-lg btn-block">Convert to credits (x4)</button></div>
+  				<div class="row"><input name="addCredit" placeholder="€ 0.00" min="0" max="10000" step="0" title="Currency" type="number" class="form-control"></div>
+  				<div style="margin-top: 7px;" class="row"><button id="charge" type="button" class="btn btn-success btn-lg btn-block">Convert to credits (x4)</button></div>
   			</div>
     	</div>   
 
@@ -77,6 +77,13 @@ Layout::includeLayout('header'); ?>
 		    	</tr>
 		  	</thead>
 		 	<tbody>
+		 		<?php 
+		 			if(Data::get('history')==null)
+		 				echo "mensagem de erro. nao tem historico";
+	 				else{
+	 					//criar tabela
+	 				}
+	 			?>
 		    	<tr>
 		      		<th scope="row">1</th>
 		      		<td>Mark</td>
@@ -90,20 +97,69 @@ Layout::includeLayout('header'); ?>
 
     <script src="<?= Asset::js('/changeActiveNavLink.js')?>"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="<?= Asset::js('/bootstrap/bootstrap.bundle.min.js')?>"></script> 
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
     	(function() {
-    		$( "#btnEditname" ).click(function() {
-    			if($("input[name=name]").prop('disabled'))
-    				$("input[name=name]").prop('disabled', false);
-    			else{    				
-    				$("input[name=name]").prop('disabled', true);    				
-					var value = $('input[name=name]').val();
+    		$( ".edit" ).click(function(event) {   
 
-					//testar editar com o campo nome, depois tentar fazer dinamico para todos os campos
-					$.ajax({url: "edit/", type: 'post', data:{name:value}, success: function(result){
+    			var field = $(this).attr("id");
+
+    			if($("input[name="+field+"]").prop('disabled'))
+    				$("input[name="+field+"]").prop('disabled', false);
+    			else{    				
+    				$("input[name="+field+"]").prop('disabled', true);    				
+					var value = $("input[name="+field+"]").val();
+					$.ajax({url: "edit/", type: 'post', data:{"value":value,"field":field}, success: function(result){
 				    	console.log(result);
+				    	if(!jQuery.isEmptyObject(result))
+		    			{
+		    				var errorResponse = JSON.parse(result);
+		    				$("input[name="+field+"]").val(errorResponse['originalValue']);
+
+		    				//ALERT -> MOSTRAR ERRO
+		    				$(".editEmailDiv").append(
+
+		    					"<div style='width:80%;' class='mx-auto alertDiv'>"+
+		    						"<div class='alert alert-warning' role='alert'>"+
+		    							errorResponse['msg']+
+	    							"</div>"+
+								"</div>"
+	    					);		    				
+		    			}
+		    			else
+	    					$(".alertDiv").remove();
 				    }});
     			}
+			});
+
+			$("#btnViewPassword").click(function(){
+				if($("#btnViewPassword i").hasClass("fa-eye"))
+				{
+					$("#btnViewPassword i").removeClass("fa-eye");
+					$("#btnViewPassword i").addClass("fa-eye-slash");
+					$("input[name=password]").attr('type','text');
+				}else{
+					$("#btnViewPassword i").removeClass("fa-eye-slash");
+					$("#btnViewPassword i").addClass("fa-eye");
+					$("input[name=password]").attr('type','password');
+				}
+			});
+
+			$( "#charge" ).click(function(event) {   
+
+				if($.isNumeric($("input[name=addCredit]").val()))
+				{
+					$("input[name=addCredit]").css("border", "none");
+					$.ajax({url: "charge/", type: 'post', data:{"value":$("input[name=addCredit]").val()}, success: function(result){
+				    	console.log(result);
+				    	//atualizar tabela
+				    }});
+				}
+				else{
+					$("input[name=addCredit]").css("border", "solid 2px red");
+					$("input[name=addCredit]").effect( "shake" );
+				}
 			});
 		})();
     </script>
