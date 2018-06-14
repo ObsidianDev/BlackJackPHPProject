@@ -4,7 +4,17 @@ use ArmoredCore\WebObjects\Layout;
 use ArmoredCore\WebObjects\URL;
 use ArmoredCore\WebObjects\Session;
 Layout::includeLayout('header'); ?>
+
+
 <input type="hidden" name="page" value="home">
+<script src="<?= Asset::js('/wobblyslideshoweffect/snap.svg-min.js')?>"></script>
+<script src="<?= Asset::js('/wobblyslideshoweffect/modernizr.custom.js')?>"></script>
+<script src="<?= Asset::js('/wobblyslideshoweffect/classie.js')?>"></script>
+<script src="<?= Asset::js('/wobblyslideshoweffect/sliderFx.js')?>"></script>
+<link rel="stylesheet" href="<?= Asset::css('/wobblyslideshoweffect/normalize.css')?>" media="screen" >
+<link rel="stylesheet" href="<?= Asset::css('/wobblyslideshoweffect/slideshow.css')?>" media="screen" >    
+
+
     <!-- container -->
     <div class="container-fluid">
 	    <div id="main" class="container-fluid">
@@ -23,7 +33,7 @@ Layout::includeLayout('header'); ?>
 							  	<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
 							  		<?php 
 								  		if(Session::has('username'))
-								  			echo "<button class='btn btn-outline-secondary my-2 my-lg-0 btn-lg' type='submit'><a href='". URL::toRoute('plano/index') ."'>Play</a></button>";
+								  			echo "<button class='btn btn-outline-secondary my-2 my-lg-0 btn-lg' type='submit'><a href='". URL::toRoute('game/') ."'>Play</a></button>";
 							  			else
 							  				echo "<button id='showLogin' class='btn btn-outline-secondary my-2 my-lg-0 btn-lg' type='submit'>Register</button>";
 							  		?>
@@ -70,7 +80,7 @@ Layout::includeLayout('header'); ?>
 							  	<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
 							  		<?php 
 								  		if(Session::has('username'))
-								  			echo "<button class='btn btn-outline-secondary my-2 my-lg-0 btn-lg' type='submit'><a href='". URL::toRoute('plano/index') ."'>PLAY !</a></button>";
+								  			echo "<button class='btn btn-outline-secondary my-2 my-lg-0 btn-lg' type='submit'><a href='". URL::toRoute('game/') ."'>PLAY !</a></button>";
 							  			else
 							  				echo "<button id='showLogin' class='btn btn-outline-secondary my-2 my-lg-0 btn-lg' type='submit'>Register !</button>";
 							  		?>

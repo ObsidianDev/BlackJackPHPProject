@@ -1,0 +1,36 @@
+#containerProfile{
+	background-color: rgba(43, 43, 43, 0.90);
+	margin-top: 3%;
+	padding-bottom: 3%;
+}
+
+#containerProfile .list-group{
+	padding-top: 70px;
+	padding-bottom: 50px;
+	width: 80%;
+}
+
+#containerProfile .list-group button{
+	background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+#containerProfile .list-group input{
+	margin-left: 8%;
+	margin-right: 8%;
+}
+
+#creditSection{
+	margin-top: 70px;
+	width: 70%;
+	color:white;
+}
+
+.table{
+	margin-top: 80px;
+	width: 80%;
+}

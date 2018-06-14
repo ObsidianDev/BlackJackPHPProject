@@ -4,7 +4,8 @@ use ArmoredCore\Facades\AssetBundler;
 use ArmoredCore\WebObjects\URL;
 use ArmoredCore\WebObjects\Session;
 use ArmoredCore\WebObjects\Layout;
-Layout::includeLayout('modalLogin');
+if(!Session::has('username'))
+  Layout::includeLayout('modalLogin');
 ?>
 
 <!DOCTYPE html>
@@ -21,16 +22,11 @@ Layout::includeLayout('modalLogin');
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700"  media="screen">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <link rel="stylesheet" href="<?= Asset::css('/bootstrap/bootstrap.min.css')?>" media="screen" >
-    <link rel="stylesheet" href="<?= Asset::css('/main.css')?>" media="screen" >
-    <link rel="stylesheet" href="<?= Asset::css('/wobblyslideshoweffect/normalize.css')?>" media="screen" >
-    <link rel="stylesheet" href="<?= Asset::css('/wobblyslideshoweffect/slideshow.css')?>" media="screen" >
+    <link rel="stylesheet" href="<?= Asset::css('/main.css')?>" media="screen" >    
+    
     <script src="<?= Asset::js('/jquery-3.3.1.min')?>"></script>
     <script src="<?= Asset::js('/bootstrap/bootstrap.min.js')?>"></script>
-    <script src="<?= Asset::js('/bootstrap/bootstrap.bundle.min.js')?>"></script>
-    <script src="<?= Asset::js('/wobblyslideshoweffect/snap.svg-min.js')?>"></script>
-    <script src="<?= Asset::js('/wobblyslideshoweffect/modernizr.custom.js')?>"></script>
-    <script src="<?= Asset::js('/wobblyslideshoweffect/classie.js')?>"></script>
-    <script src="<?= Asset::js('/wobblyslideshoweffect/sliderFx.js')?>"></script>    
+    <script src="<?= Asset::js('/bootstrap/bootstrap.bundle.min.js')?>"></script>    
 </head>
 
 <body style="background-image: url(<?php echo Asset::image('main-background.jpg') ?>); background-attachment: fixed;background-position: center;background-repeat: no-repeat;background-size: cover;">
@@ -48,15 +44,19 @@ Layout::includeLayout('modalLogin');
 	      		</li>
 	      		<?php 
 	      			if(Session::has('username'))
-      					echo "<li id='navprofile' class='nav-item'><a class='nav-link' href='". URL::toRoute('plano/index') ."''>Profile</a></li>";
+      					echo "<li id='navprofile' class='nav-item'><a class='nav-link' href='". URL::toRoute('profile/') ."''>Profile</a></li>";
 	      		?>
 	      		<li id="navjacktop" class="nav-item">
 	        		<a class="nav-link" href="<?=URL::toRoute('plano/index')?>">Jacktop 10</a>
       			</li>	
+            <?php 
+              if(Session::has('username')) 
+                echo "<li style='padding-left: 30px;' id='navprofile' class='nav-item'><strong class='nav-link'>".Session::get('username')."</strong></li>";
+            ?>
 	    	</ul>
 	    	<?php 
       			if(Session::has('username'))
-  					  echo "<button class='btn btn-outline-secondary my-2 my-sm-0' type='submit'>Play</button>".
+  					  echo "<a class='btn btn-outline-secondary my-2 my-sm-0'href='". URL::toRoute('game/') ."'>Play</a>".
   					       "<a class='btn btn-link' href='". URL::toRoute('logout/') ."'> <i class='fas fa-power-off'></i></a>";
 				    else
 					    echo "<button style='cursor: pointer;' class='btn btn-outline-secondary my-2 my-sm-0 disabled' type='submit'>Play</button>".

@@ -19,6 +19,11 @@ Router::post('home/register',	'HomeController/register');
 Router::post('register/',       'HomeController/register');
 Router::get('logout/',      	'HomeController/logout');
 
+Router::get('profile/',      	'ProfileController/index');
+Router::post('profile/edit',    'ProfileController/edit');
+
+Router::get('backoffice/',      'BackofficeController/index');
+
 
 Router::get('game/',			'Middle/start');
 Router::post('game/',			'Middle/postHandler');

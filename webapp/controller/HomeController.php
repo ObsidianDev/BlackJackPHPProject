@@ -18,9 +18,15 @@ class HomeController extends BaseController
         $userFound = User::find(array('conditions' => array('email=? and password=?', $loginData['email'], $loginData['password'])));
         if($userFound != null)//login com sucesso
         {
-            Session::set('username',$userFound->username);
-            Session::set('userID',$userFound->id);
-            Redirect::toRoute('home/');        
+            if($userFound->role == 1){
+                Session::set('admin',$userFound->username);
+                Redirect::toRoute('backoffice/');
+            }
+            else{
+                Session::set('username',$userFound->username);
+                Session::set('userID',$userFound->id);
+                Redirect::toRoute('home/');
+            }                   
         }
         else
         {//login invalido
@@ -35,7 +41,7 @@ class HomeController extends BaseController
     public function register(){
 
         $registrationData = Post::getAll();
-        $attributes = array('username' =>  $registrationData['username'], 'password' =>  $registrationData['password'], 'blocked' => 0, 'email' =>  $registrationData['email'], 'birthdate' =>  $registrationData['birthdate'], 'name' => $registrationData['name'], 'balance' => 1000, 'role' => 0);
+        $attributes = array('username' =>  $registrationData['username'], 'password' =>  $registrationData['password'], 'blocked' => 0, 'email' =>  $registrationData['email'], 'birthdate' =>  $registrationData['birthdate'], 'name' => $registrationData['name'], 'balance' => 400, 'role' => 0);
 
         $exists = User::exists(array('conditions' => array('email=? or username=?', $registrationData['email'], $registrationData['username'])));
         $user = new User($attributes);
