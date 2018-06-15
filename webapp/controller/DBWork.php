@@ -29,10 +29,10 @@ class DBWork extends BaseController{
 
 		$user=User::all();
 		if ($case==='lose') {
-			$history= new History(array('date' => date("d/m/Y"), 'type' => 'bet', 'description' => 'bet', 'credit' => 0 , 'debit' => $value, 'balance' => $balance, 'player_id' => Session::get('userID')));		
+			$history= new History(array('type' => 'bet', 'description' => 'bet', 'credit' => 0 , 'debit' => $value, 'balance' => $balance, 'player_id' => Session::get('userID')));		
 		}
 		else if ($case==='win'){
-			$history= new History(array('date' => date("d/m/Y"), 'type' => 'Win', 'description' => 'Win', 'credit' => $value*2 , 'debit' => 0, 'balance' => $balance, 'player_id' => Session::get('userID')));
+			$history= new History(array('type' => 'Win', 'description' => 'Win', 'credit' => $value*2 , 'debit' => 0, 'balance' => $balance, 'player_id' => Session::get('userID')));
 			foreach ($user as $uniqueUser) {
 				if ($uniqueUser->username===Session::get('username')) {
 					$currentBalance=$uniqueUser->balance;
@@ -44,7 +44,7 @@ class DBWork extends BaseController{
 			}
 		}
 		else if ($case==='blackjack'){
-			$history= new History(array('date' => date("d/m/Y"), 'type' => 'Win', 'description' => 'Blackjack Win', 'credit' => $value*3 , 'debit' => 0, 'balance' => $balance, 'player_id' => Session::get('userID')));
+			$history= new History(array('type' => 'Win', 'description' => 'Blackjack Win', 'credit' => $value*3 , 'debit' => 0, 'balance' => $balance, 'player_id' => Session::get('userID')));
 			foreach ($user as $uniqueUser) {
 				if ($uniqueUser->username===Session::get('username')) {
 					$currentBalance=$uniqueUser->balance;
@@ -56,7 +56,7 @@ class DBWork extends BaseController{
 			}
 		}
 		else if ($case==='surrender'){
-			$history= new History(array('date' => date("d/m/Y"), 'type' => 'Surr', 'description' => 'Surrendered', 'credit' => round($value*0.5) , 'debit' => 0, 'balance' => $balance, 'player_id' => Session::get('userID')));
+			$history= new History(array('type' => 'Surr', 'description' => 'Surrendered', 'credit' => round($value*0.5) , 'debit' => 0, 'balance' => $balance, 'player_id' => Session::get('userID')));
 			foreach ($user as $uniqueUser) {
 				if ($uniqueUser->username===Session::get('username')) {
 					$currentBalance=$uniqueUser->balance;
@@ -68,7 +68,7 @@ class DBWork extends BaseController{
 			}
 		}
 		else if ($case==='blackjackLoss'){
-			$history= new History(array('date' => date("d/m/Y"), 'type' => 'Loss', 'description' => 'Blackjack Loss', 'credit' => 0 , 'debit' => $value*2, 'balance' => $balance, 'player_id' => Session::get('userID')));
+			$history= new History(array('type' => 'Loss', 'description' => 'Blackjack Loss', 'credit' => 0 , 'debit' => $value*2, 'balance' => $balance, 'player_id' => Session::get('userID')));
 			foreach ($user as $uniqueUser) {
 				if ($uniqueUser->username===Session::get('username')) {
 					$currentBalance=$uniqueUser->balance;
@@ -86,7 +86,7 @@ class DBWork extends BaseController{
 		$topten=TopTen::all();
 		$playerFound=false;
 		foreach ($topten as $player) {
-			if ($player->nome===Session::get('username')) {
+			if ($player->name===Session::get('username')) {
 				$playerFound=true;
 				$chosenPlayer=$player;
 			}
@@ -99,7 +99,7 @@ class DBWork extends BaseController{
 			}
 		}
 		else{
-			$newScore= new TopTen(array('nome'=>Session::get('username'), 'data'=>date("d/m/Y"), 'score' => $value));
+			$newScore= new TopTen(array('name'=>Session::get('username'), 'data'=>date("d/m/Y"), 'score' => $value));
 			$newScore->save();
 		}
 	}

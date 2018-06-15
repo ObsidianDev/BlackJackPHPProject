@@ -51,7 +51,7 @@ class ProfileController extends BaseController
     }
 
     public function charge($value){
-        /*
+        /* */ 
         //$chargeValues = Post::getAll();
         $userCharging = User::find(Session::get('userID'));
         //$charge = $chargeValues['value']*4;
@@ -61,23 +61,23 @@ class ProfileController extends BaseController
 
         //'description' => "Charging of ".$chargeValues['value']." euros", 
         //'credit' => $chargeValues['value']*4,
+
         $history = new History (array( 
-            'date' => date('Y-m-d H:i:s T'),
             'type' => "pay", 
             'description' => "Charging of ".$charge." euros", 
-            'debit' => null,
+            'debit' => 0,
             'credit' => 4,
             'balance' => $userCharging->balance, 
             'player_id' => Session::get('userID')
         ));
 
-        $history::assign_attribute('date',$history->date);
+        //$history::assign_attribute('date',$history->date);
 
         //$history = History::create($attributes);
 
         //$userCharging->save(); 
-        //$history->save();  
-        */ 
+        $history->save(); 
+        
     }
     
 }

@@ -30,6 +30,7 @@ Router::get('backoffice/',       'BackofficeController/index');
 
 Router::get('game/',			 'Middle/start');
 Router::post('game/',			 'Middle/postHandler');
+Router::post('game/game',		 'Middle/postHandler');
 
 
 
