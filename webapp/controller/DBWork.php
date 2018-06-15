@@ -29,7 +29,7 @@ class DBWork extends BaseController{
 
 		$user=User::all();
 		if ($case==='lose') {
-			$history= new History(array('type' => 'bet', 'description' => 'bet', 'credit' => 0 , 'debit' => $value, 'balance' => $balance, 'player_id' => Session::get('userID')));		
+			$history= new History(array('type' => 'bet', 'description' => 'bet', 'credit' => 0 , 'debit' => $value, 'balance' => $balance, 'player_id' => Session::get('userID')));	
 		}
 		else if ($case==='win'){
 			$history= new History(array('type' => 'Win', 'description' => 'Win', 'credit' => $value*2 , 'debit' => 0, 'balance' => $balance, 'player_id' => Session::get('userID')));
@@ -63,7 +63,6 @@ class DBWork extends BaseController{
 					$uniqueUser->balance=$currentBalance+round($value*0.5);
 					Session::set('currentBalance', $uniqueUser->balance);
 					$uniqueUser->save();
-					$this->topTenVerifs(round($value*0.5));
 				}
 			}
 		}
@@ -78,8 +77,6 @@ class DBWork extends BaseController{
 				}
 			}
 		}
-
-		
 		$history->save();
 	}
 	public function topTenVerifs($value){
@@ -94,12 +91,12 @@ class DBWork extends BaseController{
 		if ($playerFound==true) {
 			if ($chosenPlayer->score<$value) {
 				$chosenPlayer->score=$value;
-				$chosenPlayer->data=date("d/m/Y");
+				$chosenPlayer->date=date("Y-m-d");
 				$chosenPlayer->save();
 			}
 		}
 		else{
-			$newScore= new TopTen(array('name'=>Session::get('username'), 'data'=>date("d/m/Y"), 'score' => $value));
+			$newScore= new TopTen(array('name'=>Session::get('username'), 'date'=>date("Y-m-d"), 'score' => $value, 'player_id' => Session::get('userID')));
 			$newScore->save();
 		}
 	}

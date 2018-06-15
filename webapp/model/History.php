@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 use ActiveRecord\Model; 
 use ArmoredCore\WebObjects\Session;
 class History extends Model{

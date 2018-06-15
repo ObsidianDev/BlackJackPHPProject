@@ -51,7 +51,7 @@ class Game extends Model{
 						array_push($hand, $deck[Session::get('arrayCounter')]);
 					}
 					else{
-						if (Session::get('totalAI')<17) {
+						if (Session::get('totalAI')<16) {
 							array_push($handAI, $deck[Session::get('arrayCounter')]);
 							
 						}
@@ -163,7 +163,7 @@ class Game extends Model{
 			return $msg;
 		}
 		public function stand(){
-			while (Session::get('totalAI')<17) {
+			while (Session::get('totalAI')<16) {
 				$deck=unserialize(serialize(Session::get('deck')));
 				$handAI=unserialize(serialize(Session::get('handAI')));
 				array_push($handAI, $deck[Session::get('arrayCounter')]);
