@@ -8,22 +8,73 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-<button id="hit" name="hit">Hit</button>
-<button name="split">Stand</button>
-<button name="double">Double</button>
-<button name="split">Split</button>
-<button id="surrender" name="surrender">Surrender</button>
 <div id="div1"></div>
+
+<button id="hit" name="hit">Hit</button>
+<button id="stand" name="stand">Stand</button>
+<button id="double" name="double">Double</button>
+<button id="surrender" name="surrender">Surrender</button>
+<input placeholder="Minimum bet: 5" style="margin-left: 50px" type="number" id="betValue">
+<button id="testbet" name="testbet">Bet</button>
+
+<div id="div2"></div>
 <script type="text/javascript">
 	$("#hit").click(function(){
 	    $.ajax({url: "game", type: 'post', data:{hit:'true'}, success: function(result){
+	    	if(result.trim()!==''){
 	        	$("#div1").html(result);
+	        }
+	        else{
+	        	alert('Place a bet first.');
+	        }
+	    }});
+	});
+	$(document).ready(function(){
+	    $.ajax({url: "game", type: 'post', data:{start:'true'}, success: function(result){
+	    	if(result.trim()!==''){
+	        	$("#div1").html(result);
+	        }
 	    }});
 	});
 	$("#surrender").click(function(){
 	    $.ajax({url: "game", type: 'post', data:{surrender:'true'}, success: function(){
-	        	$("#div1").html('');
+	        	$("#div1").html('You lose.');
 	    }});
+	});
+	$("#stand").click(function(){
+	    $.ajax({url: "game", type: 'post', data:{stand:'true'}, success: function(result){
+	    	if(result.trim()!==''){
+	        	$("#div1").html(result);
+	        }
+	        else{
+	        	alert('Place a bet first.');
+	        }
+	    }});
+	});
+	$("#double").click(function(){
+	    $.ajax({url: "game", type: 'post', data:{double:'true'}, success: function(result){
+	    	if(result.trim()!==''){
+	        	$("#div1").html(result);
+	        }
+	        else{
+	        	alert('Place a bet first.');
+	        }
+	    }});
+	});
+	$("#testbet").click(function(){
+		if ($('#betValue').val()>4) {
+		    $.ajax({url: "game", type: 'post', data:{confirmBet:Math.round($('#betValue').val())}, success: function(result){
+		    	if(result.trim()!==''){
+		        	$("#div1").html(result);	
+		    	}
+		    	else{
+		    		alert("There's a bet in place already.");
+		    	}
+		    }});
+		}
+		else{
+			alert('You must bet at least 5 credits to play.');
+		}
 	});
 </script>
 </body>
