@@ -25,6 +25,13 @@ class HomeController extends BaseController
                 Session::set('admin',$userFound->username);
                 Redirect::toRoute('backoffice/');
             }
+            else if($userFound->blocked == true){
+                $userNotFound = new User();
+                $userNotFound->errors = 'Sorry. You were blocked by an admin.';
+                $userNotFound->email = $loginData['email'];
+                $userNotFound->password = $loginData['password'];
+                View::make('home.index', ['userNotFound' => $userNotFound, 'userexists' => null]);
+            }
             else{
                 Session::set('username',$userFound->username);
                 Session::set('userID',$userFound->id);

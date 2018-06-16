@@ -1,9 +1,11 @@
 ﻿<?php 
-	use ArmoredCore\WebObjects\Asset;
-	use ArmoredCore\WebObjects\Layout; 
-?>
+use ArmoredCore\WebObjects\Asset;
+use ArmoredCore\WebObjects\Layout; 
+Layout::includeLayout('headerBO');?>
+
 	<title>Admin Panel</title>
-<div id="divTable">
+
+<div class="container" id="divTable">
 </div>
 </body>
  
@@ -12,6 +14,9 @@
     <script src="<?= Asset::js('/bootstrap/bootstrap.bundle.min.js')?>"></script> 
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
+
+	$("nav").css("margin-top", "-24px");
+
 	$(document).ready(function(){		
 	    $.ajax({url: "data", type: 'post', data:{table:'true'}, success: function(result){
 	        	$("#divTable").html(result); 

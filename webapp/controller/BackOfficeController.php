@@ -7,7 +7,6 @@ use ArmoredCore\WebObjects\Session;
 class BackOfficeController extends BaseController {
 
 	public function index(){
-		Session::destroy();
 		if(Session::has('admin'))
 			return View::make('Blackjack.AdminView');
 		else
