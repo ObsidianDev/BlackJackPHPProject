@@ -99,7 +99,7 @@ class Game extends Model{
 			else if(Session::get('totalAI')==21&&Session::get('pointCounter')==21&& sizeof(Session::get('hand'))>2){
 				$res=2;
 			}
-			else if(Session::get('totalAI')==21&&Session::get('pointCounter')==21&& sizeof(Session::get('hand'))==2){
+			else if(Session::get('totalAI')==21&&Session::get('pointCounter')==21&& sizeof(Session::get('hand'))<=2){
 				$res=1;
 			}
 			

@@ -19,62 +19,62 @@ Layout::includeLayout('modalWarning');?>
 
 	$("nav").css("margin-top", "-24px");
 
-	$("#hit").click(function(){
+	$("#hit").click(function(){		//When you press hit, a post request is executed, sending a variable named hit with the value true
 	    $.ajax({url: "game", type: 'post', data:{hit:'true'}, success: function(result){
 	    	if(result.trim()!==''){
-	        	$("#div1").html(result);
+	        	$("#div1").html(result); //if result doesn't come out as empty, fills div1 with all the html code generated through php
 	        }
 	        else{
-	        	alert('Place a bet first.');
+	        	alert('Place a bet first.'); //if result is empty (no Session bet variable is set)
 	        }
 	    }});
 	});
-	$(document).ready(function(){
+	$(document).ready(function(){		//If there's a pending game and session game variables are set, this will resume that game, happens on page load
 	    $.ajax({url: "game", type: 'post', data:{start:'true'}, success: function(result){
 	    	if(result.trim()!==''){
-	        	$("#div1").html(result);
+	        	$("#div1").html(result); //Fills div1 with all the html code generated through php
 	        }
 	    }});
 	});
-	$("#surrender").click(function(){
+	$("#surrender").click(function(){	//When you press surrender, you automatically lose but gain half the value of the bet, requests act the same way as the hit function
 	    $.ajax({url: "game", type: 'post', data:{surrender:'true'}, success: function(){
 	        	$("#div1").html('You lose.');
 	    }});
 	});
-	$("#stand").click(function(){
+	$("#stand").click(function(){ //When you press the stand button you won't draw anymore and the dealer only draws until 16 or higher, then win verifications occur as normal
 	    $.ajax({url: "game", type: 'post', data:{stand:'true'}, success: function(result){
 	    	if(result.trim()!==''){
-	        	$("#div1").html(result);
+	        	$("#div1").html(result); //if result doesn't come out as empty, fills div1 with all the html code generated through php
 	        }
 	        else{
-	        	alert('Place a bet first.');
+	        	alert('Place a bet first.'); //if result is empty (no Session bet variable is set)
 	        }
 	    }});
 	});
-	$("#double").click(function(){
+	$("#double").click(function(){ //When you press double, you draw an extra card and double your current bet. Then you stand and everything occurs as normal to find a winner
 	    $.ajax({url: "game", type: 'post', data:{double:'true'}, success: function(result){
 	    	if(result.trim()!==''){
-	        	$("#div1").html(result);
+	        	$("#div1").html(result); //if result doesn't come out as empty, fills div1 with all the html code generated through php
 	        }
 	        else{
-	        	alert('Place a bet first.');
+	        	alert('Place a bet first.'); //if result is empty (no Session bet variable is set)
 	        }
 	    }});
 	});
-	$("#testbet").click(function(){
+	$("#testbet").click(function(){ //This happens when you press the bet button
 
-		if ($('#betValue').val()>4) {
+		if ($('#betValue').val()>4) { //Verification to see if your bet is higher than 4 credits, if not, it's deemed as an invalid bet
 		    $.ajax({url: "game", type: 'post', data:{confirmBet:Math.round($('#betValue').val())}, success: function(result){
 		    	if(result.trim()!==''){
-		        	$("#div1").html(result);	
+		        	$("#div1").html(result);	//In here you place your bet and you hit
 		    	}
 		    	else{
-		    		alert("There's a bet in place already.");
+		    		alert("There's a bet in place already."); //If you try to place a bet when the bet Session variable is already set
 		    	}
 		    }});
 		}
 		else{
-			alert('You must bet at least 5 credits to play.');
+			alert('You must bet at least 5 credits to play.'); 
 		}
 	});
 </script>
