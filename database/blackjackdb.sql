@@ -38,7 +38,7 @@ DROP TABLE IF EXISTS `topten`;
 CREATE TABLE IF NOT EXISTS `topten` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(100) CHARACTER SET utf16 NOT NULL,
-  `date` datetime NOT NULL,
+  `date` date NOT NULL,
   `score` int(10) NOT NULL,
   `player_id` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),

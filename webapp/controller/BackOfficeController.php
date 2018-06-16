@@ -1,12 +1,19 @@
 ﻿<?php
 use ArmoredCore\Controllers\BaseController;
 use ArmoredCore\WebObjects\View;
+use ArmoredCore\WebObjects\Redirect;
 use ArmoredCore\WebObjects\Post;
+use ArmoredCore\WebObjects\Session;
 class BackOfficeController extends BaseController {
 
 	public function index(){
-		return View::make('Blackjack.AdminView');
+		Session::destroy();
+		if(Session::has('admin'))
+			return View::make('Blackjack.AdminView');
+		else
+			Redirect::toRoute('home/');
 	}
+
 	public function generateTable(){
 		$userList=User::all();
 		$table='<table class="table table-dark mx-auto">
@@ -71,5 +78,5 @@ class BackOfficeController extends BaseController {
 		}
 	}
 
-	}
+}
 ?>

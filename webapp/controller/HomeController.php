@@ -9,7 +9,10 @@ class HomeController extends BaseController
 {
     public function index(){
         
-        return View::make('home.index',['userNotFound' => null, 'userexists' => null]);
+        if(Session::has('admin'))
+            Redirect::toRoute('backoffice/');
+        else
+            return View::make('home.index',['userNotFound' => null, 'userexists' => null]);
     }
 
     public function login(){

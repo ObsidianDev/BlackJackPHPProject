@@ -28,7 +28,7 @@ Router::post('profile/charge',   'ProfileController/charge');
 Router::get('jacktop/',   		 'TopController/index');
 
 Router::get('backoffice/',       'BackOfficeController/index');
-Router::post('backoffice/data', 	 'BackOfficeController/requestHandler');
+Router::post('backoffice/data',  'BackOfficeController/requestHandler');
 
 
 Router::get('game/',			 'Middle/start');
