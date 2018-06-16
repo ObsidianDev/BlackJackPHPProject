@@ -23,7 +23,7 @@ Router::get('logout/',      	 'HomeController/logout');
 
 Router::get('profile/',          'ProfileController/index');
 Router::post('profile/edit',     'ProfileController/edit');
-Router::get('profile/charge',    'ProfileController/charge');
+Router::post('profile/charge',   'ProfileController/charge');
 
 Router::get('backoffice/',       'BackofficeController/index');
 

@@ -11,7 +11,6 @@ class ProfileController extends BaseController
         if (Session::has('username')){
         	$currentUser = User::find(Session::get('userID'));
             $currentUserHistory = History::find(array('conditions' => array('player_id=? ', Session::get('userID'))));
-            
             return View::make('home.profile',['currentUser' => $currentUser,'history' => $currentUserHistory]);
         }
         else
@@ -51,25 +50,35 @@ class ProfileController extends BaseController
         $userEdited->save();
     }
 
-    public function charge($value){
-        /* */ 
-        //$chargeValues = Post::getAll();
-        $userCharging = User::find(Session::get('userID'));
-        //$charge = $chargeValues['value']*4;
-        $charge = $value*4;
-        $userCharging->balance =  $userCharging->balance+$charge;
+    public function charge(){
+        $chargeValues = Post::getAll();//receber valor carregado
+        $userCharging = User::find(Session::get('userID'));//obter id do atual utilizador logado
 
+        $charge = $chargeValues['value']*4;//calcular total de creditos a ser carregados
+        $userCharging->balance =  $userCharging->balance+$charge;//atualizar saldo do utilizador        
 
-        //'description' => "Charging of ".$chargeValues['value']." euros", 
-        //'credit' => $chargeValues['value']*4,
+        History::create(array(            
+            'type' => "pay", 
+            'description' => "Charging of ".$chargeValues['value']." euros", 
+            'debit' => 0,
+            'credit' => $charge,
+            'balance' => $userCharging->balance, 
+            'player_id' => Session::get('userID')
+        ));//criar nova history com o carregamento
 
-        //$history::assign_attribute('date',$history->date);
+        $userCharging->save();//guardar alteracoes        
 
-        //$history = History::create($attributes);
+        $insertedHistory = History::find('last');
 
-        //$userCharging->save(); 
-        $history->save(); 
-        
+        echo json_encode(array(
+            'id'=>$insertedHistory->id,
+            'date'=>$insertedHistory->date->format('Y-m-d H:i:s'),
+            'type'=>$insertedHistory->type,
+            'description'=>$insertedHistory->description,
+            'debit'=>$insertedHistory->debit,
+            'credit'=>$insertedHistory->credit,
+            'balance'=>$insertedHistory->balance            
+        ));   
     }
     
 }

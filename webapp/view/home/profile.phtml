@@ -112,7 +112,6 @@ Layout::includeLayout('header'); ?>
     				$("input[name="+field+"]").prop('disabled', true);    				
 					var value = $("input[name="+field+"]").val();
 					$.ajax({url: "edit/", type: 'post', data:{"value":value,"field":field}, success: function(result){
-				    	console.log(result);
 				    	if(!jQuery.isEmptyObject(result))
 		    			{
 		    				var errorResponse = JSON.parse(result);
@@ -152,9 +151,15 @@ Layout::includeLayout('header'); ?>
 				if($.isNumeric($("input[name=addCredit]").val()))
 				{
 					$("input[name=addCredit]").css("border", "none");
-					$.ajax({url: "charge/", type: 'get', data:{"value":$("input[name=addCredit]").val()}, success: function(result){
-				    	console.log(result);
-				    }});
+					$.ajax({						
+						type: 'post', 
+						url: "charge/", 
+						data:{"value":$("input[name=addCredit]").val()}, 
+						success: function(result){
+							var chargeRegist = JSON.parse(result);
+							console.log(chargeRegist00);
+				    	}
+					});
 				}
 				else{
 					$("input[name=addCredit]").css("border", "solid 2px red");
