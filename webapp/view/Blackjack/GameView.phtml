@@ -7,19 +7,21 @@ Layout::includeLayout('modalWarning');
 ?>
 <link rel="stylesheet" href="<?= Asset::css('/bootstrap/bootstrap.min.css')?>" media="screen" >
 <input type="hidden" name="page" value="game">
-<div style="text-align: center;" id="wrapper">
-	<div style="display: inline-block;" id="div1"></div>
-</div>
-<div style="text-align: center; margin-top: 30px;" id="wrapperButtons">
-	<div style="display: inline-block;" id="divButtons">
-		<form class="form-inline" action="javacript:void(0);">
-		<button id="hit" class="btn btn-info" style="color: white; margin-left: 5px;" name="hit">Hit</button>
-		<button id="stand" class="btn btn-primary" style="margin-left: 5px" name="stand">Stand</button>
-		<button id="double" class="btn btn-success" style="margin-left: 5px" name="double">Double</button>
-		<button id="surrender" class="btn btn-danger" style="margin-left: 5px" name="surrender">Surrender</button>
-			<input class="form-control" placeholder="Minimum bet: 5" style="margin-left: 50px" type="number" id="betValue">
-			<button id="bet" class="btn btn-default" style="margin-left: 5px" name="testbet">Bet</button>
-		</form>
+<div style="height: 80%;">
+	<div style="text-align: center;" id="wrapper">
+		<div style="display: inline-block;" id="div1"></div>
+	</div>
+	<div style="text-align: center; margin-top: 30px;" id="wrapperButtons">
+		<div style="display: inline-block;" id="divButtons">
+			<form class="form-inline" action="javacript:void(0);">
+			<button id="hit" class="btn btn-info" style="color: white; margin-left: 5px;" name="hit">Hit</button>
+			<button id="stand" class="btn btn-primary" style="margin-left: 5px" name="stand">Stand</button>
+			<button id="double" class="btn btn-success" style="margin-left: 5px" name="double">Double</button>
+			<button id="surrender" class="btn btn-danger" style="margin-left: 5px" name="surrender">Surrender</button>
+				<input class="form-control" placeholder="Minimum bet: 5" style="margin-left: 50px" type="number" id="betValue">
+				<button id="bet" class="btn btn-default" style="margin-left: 5px" name="testbet">Bet</button>
+			</form>
+		</div>
 	</div>
 </div>
 
