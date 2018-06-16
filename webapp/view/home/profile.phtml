@@ -67,7 +67,6 @@ Layout::includeLayout('header'); ?>
 		<table class="table table-dark mx-auto">
 			<thead>
 		    	<tr>
-		      		<th scope="col">#</th>
 		      		<th scope="col">Date/Hour</th>
 		      		<th scope="col">Type</th>
 		      		<th scope="col">Description</th>
@@ -79,17 +78,23 @@ Layout::includeLayout('header'); ?>
 		 	<tbody>
 		 		<?php 
 		 			if(Data::get('history')==null)
-		 				echo "mensagem de erro. nao tem historico";
+		 				echo "<tr id='emptyTable'><th style='text-align:center' colspan='6'>No transactions done.</td></tr>";
 	 				else{
-	 					//criar tabela
+	 					$allHistory = Data::get('history');
+	 					foreach ($allHistory as $history) {
+	 						echo 
+	 						"<tr>
+	 							<td>".$history->date->format('Y-m-d H:i:s')."</td>
+	 							<td>".$history->type."</td>
+	 							<td>".$history->description."</td>
+	 							<td>".$history->credit."</td>
+	 							<td>".$history->debit."</td>
+	 							<td>".$history->balance."</td>
+	 						</tr>";
+
+	 					}
 	 				}
-	 			?>
-		    	<tr>
-		      		<th scope="row">1</th>
-		      		<td>Mark</td>
-		      		<td>Otto</td>
-		      		<td>@mdo</td>
-		    	</tr>		    	
+	 			?>		    	  	
 		 	</tbody>
 		</table>
 
@@ -148,6 +153,7 @@ Layout::includeLayout('header'); ?>
 
 			$( "#charge" ).click(function(event) {   
 
+
 				if($.isNumeric($("input[name=addCredit]").val()))
 				{
 					$("input[name=addCredit]").css("border", "none");
@@ -155,11 +161,14 @@ Layout::includeLayout('header'); ?>
 						type: 'post', 
 						url: "charge/", 
 						data:{"value":$("input[name=addCredit]").val()}, 
-						success: function(result){
-							var chargeRegist = JSON.parse(result);
-							console.log(chargeRegist00);
+						success: function(tableLine){
+							if($("#emptyTable").length > 0)
+								$("#emptyTable").remove();
+							
+							$("tbody").append(tableLine);
 				    	}
 					});
+					
 				}
 				else{
 					$("input[name=addCredit]").css("border", "solid 2px red");

@@ -1,13 +1,9 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-	<title>kashgrab</title>
-	<?php
-		use ArmoredCore\WebObjects\Session;
-	?>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-</head>
-<body>
+﻿<?php
+use ArmoredCore\WebObjects\Asset;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\Data;
+Layout::includeLayout('header'); ?>
+<input type="hidden" name="page" value="game">
 <div id="div1"></div>
 
 <button id="hit" name="hit">Hit</button>
@@ -19,6 +15,9 @@
 
 <div id="div2"></div>
 <script type="text/javascript">
+
+	$("nav").css("margin-top", "-24px");
+
 	$("#hit").click(function(){
 	    $.ajax({url: "game", type: 'post', data:{hit:'true'}, success: function(result){
 	    	if(result.trim()!==''){
@@ -62,6 +61,7 @@
 	    }});
 	});
 	$("#testbet").click(function(){
+
 		if ($('#betValue').val()>4) {
 		    $.ajax({url: "game", type: 'post', data:{confirmBet:Math.round($('#betValue').val())}, success: function(result){
 		    	if(result.trim()!==''){
@@ -77,5 +77,4 @@
 		}
 	});
 </script>
-</body>
-</html>
+<?php Layout::includeLayout('footer'); ?>

@@ -10,7 +10,7 @@ class ProfileController extends BaseController
     public function index(){   
         if (Session::has('username')){
         	$currentUser = User::find(Session::get('userID'));
-            $currentUserHistory = History::find(array('conditions' => array('player_id=? ', Session::get('userID'))));
+            $currentUserHistory = History::all(array('conditions' => array('player_id=? ', Session::get('userID'))));
             return View::make('home.profile',['currentUser' => $currentUser,'history' => $currentUserHistory]);
         }
         else
@@ -70,15 +70,16 @@ class ProfileController extends BaseController
 
         $insertedHistory = History::find('last');
 
-        echo json_encode(array(
-            'id'=>$insertedHistory->id,
-            'date'=>$insertedHistory->date->format('Y-m-d H:i:s'),
-            'type'=>$insertedHistory->type,
-            'description'=>$insertedHistory->description,
-            'debit'=>$insertedHistory->debit,
-            'credit'=>$insertedHistory->credit,
-            'balance'=>$insertedHistory->balance            
-        ));   
+        echo (
+            "<tr>               
+                <td>".$insertedHistory->date->format('Y-m-d H:i:s')."</td>
+                <td>".$insertedHistory->type."</td>
+                <td>".$insertedHistory->description."</td>
+                <td>".$insertedHistory->credit."</td>
+                <td>".$insertedHistory->debit."</td>               
+                <td>".$insertedHistory->balance."</td>
+            </tr>"
+        );
     }
     
 }

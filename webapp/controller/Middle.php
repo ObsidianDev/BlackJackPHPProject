@@ -3,9 +3,12 @@ use ArmoredCore\Controllers\BaseController;
 use ArmoredCore\WebObjects\Session;
 use ArmoredCore\WebObjects\Post;
 use ArmoredCore\WebObjects\View;
+use ArmoredCore\WebObjects\Redirect;
 $compdeck=0;
 class Middle extends BaseController {
 	public function start(){
+		if(!Session::has('username'))
+			Redirect::toRoute('home/');
 		if (!Session::has('first')) {
 			Session::set('first', true);
 		}
