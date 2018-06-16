@@ -3,7 +3,8 @@ use ArmoredCore\WebObjects\Asset;
 use ArmoredCore\WebObjects\Layout;
 use ArmoredCore\WebObjects\Data;
 Layout::includeLayout('header'); 
-Layout::includeLayout('modalWarning');?>
+Layout::includeLayout('modalWarning');
+?>
 <input type="hidden" name="page" value="game">
 <div id="div1"></div>
 
@@ -25,7 +26,8 @@ Layout::includeLayout('modalWarning');?>
 	        	$("#div1").html(result); //if result doesn't come out as empty, fills div1 with all the html code generated through php
 	        }
 	        else{
-	        	alert('Place a bet first.'); //if result is empty (no Session bet variable is set)
+	        	$('#msgWarning').text('Place a bet first.');
+	        	$('#modalWarning').modal('show');//if result is empty (no Session bet variable is set)
 	        }
 	    }});
 	});
@@ -47,7 +49,8 @@ Layout::includeLayout('modalWarning');?>
 	        	$("#div1").html(result); //if result doesn't come out as empty, fills div1 with all the html code generated through php
 	        }
 	        else{
-	        	alert('Place a bet first.'); //if result is empty (no Session bet variable is set)
+	        	$('#msgWarning').text('Place a bet first.');
+	        	$('#modalWarning').modal('show');//if result is empty (no Session bet variable is set)
 	        }
 	    }});
 	});
@@ -57,7 +60,8 @@ Layout::includeLayout('modalWarning');?>
 	        	$("#div1").html(result); //if result doesn't come out as empty, fills div1 with all the html code generated through php
 	        }
 	        else{
-	        	alert('Place a bet first.'); //if result is empty (no Session bet variable is set)
+	        	$('#msgWarning').text('Place a bet first.');
+	        	$('#modalWarning').modal('show'); //if result is empty (no Session bet variable is set)
 	        }
 	    }});
 	});
@@ -69,12 +73,14 @@ Layout::includeLayout('modalWarning');?>
 		        	$("#div1").html(result);	//In here you place your bet and you hit
 		    	}
 		    	else{
-		    		alert("There's a bet in place already."); //If you try to place a bet when the bet Session variable is already set
+		    		$('#msgWarning').text("There's a bet in place already.");
+	        		$('#modalWarning').modal('show'); //If you try to place a bet when the bet Session variable is already set
 		    	}
 		    }});
 		}
 		else{
-			alert('You must bet at least 5 credits to play.'); 
+			$('#msgWarning').text('You must bet at least 5 credits to play.');
+    		$('#modalWarning').modal('show');
 		}
 	});
 </script>

@@ -1,11 +1,4 @@
-<?php
-  use ArmoredCore\WebObjects\Data;
- 
-  if(Data::get('userNotFound') == null && Data::get('userexists') == null) 
-    echo "<div class='modal fade hiding' id='modalLogin' tabindex='-1' role='dialog' aria-hidden='true'>"; 
-  else 
-    echo "<div class='modal fade showing' id='modalLogin' tabindex='-1' role='dialog' aria-hidden='true'>"; 
-?>
+<div class='modal fade' id='modalWarning' tabindex='-1' role='dialog' aria-hidden='true'>
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
