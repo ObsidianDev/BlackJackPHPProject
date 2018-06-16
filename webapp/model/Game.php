@@ -67,7 +67,7 @@ class Game extends Model{
 			$this->pointCount();
 		}
 		public function winVerifs($case){
-			echo "Current Balance: ".Session::get('currentBalance')."<br>";
+			echo "<p style='text-decoration:bold; color:white; text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000, 1px 1px 0 #000;'>Current Balance: ".Session::get('currentBalance')."<p><br>";
 			$res=0;$msg='';
 			 if (Session::get('totalAI')>Session::get('pointCounter') && Session::get('totalAI') < 22  && $case==='stand') {
 				$res=6;
@@ -105,16 +105,16 @@ class Game extends Model{
 			
 			if($res !=0){
 				$dbOperation=new DBWork();
-				$msg='<br>';
+				$msg="<br><p style='text-decoration:bold; color:white; text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000, 1px 1px 0 #000;'>";
 				foreach (unserialize(serialize(Session::get('handAI'))) as $valueAI) {
 					echo '<img src='.Asset::image($valueAI->getAsset()).'>';
 				}
-				echo Session::get('totalAI');
+				echo "<span style='margin-left: 10px; text-decoration:bold; color:white; text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000, 1px 1px 0 #000;'>".Session::get('totalAI')."</span>";
 				echo '<br><br><br>';
 				foreach (unserialize(serialize(Session::get('hand'))) as $value) {
 					echo '<img src='.Asset::image($value->getAsset()).'>';
 				}
-				echo Session::get('pointCounter');
+				echo "<span style='margin-left: 10px; text-decoration:bold; color:white; text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000, 1px 1px 0 #000;'>".Session::get('pointCounter')."</span>";
 				if($res==1){
 					$msg.= 'Blackjack! You win';
 					$dbOperation->historyUpdate('blackjack', Session::get('currentBet'), Session::get('currentBalance'));
@@ -153,13 +153,14 @@ class Game extends Model{
 					}
 					$countVal++;
 				}
-				echo unserialize(serialize(Session::get('handAI')))[0]->getPoints();
+				echo "<span style='margin-left: 10px; text-decoration:bold; color:white; text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000, 1px 1px 0 #000;'>".unserialize(serialize(Session::get('handAI')))[0]->getPoints()."</span>";
 				echo '<br><br><br>';
 				foreach (unserialize(serialize(Session::get('hand'))) as $value) {
 					echo '<img src='.Asset::image($value->getAsset()).'>';
 				}
-				echo Session::get('pointCounter');
+				echo "<span style='margin-left: 10px; text-decoration:bold; color:white; text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000, 1px 1px 0 #000;'>".Session::get('pointCounter')."</span>";
 			}
+			$msg.="</p>";
 			return $msg;
 		}
 		public function stand(){

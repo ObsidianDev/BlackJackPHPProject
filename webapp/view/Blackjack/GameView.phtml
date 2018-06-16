@@ -7,14 +7,19 @@ Layout::includeLayout('modalWarning');
 ?>
 <link rel="stylesheet" href="<?= Asset::css('/bootstrap/bootstrap.min.css')?>" media="screen" >
 <input type="hidden" name="page" value="game">
-<div id="div1"></div>
-
-<button id="hit" name="hit">Hit</button>
-<button id="stand" name="stand">Stand</button>
-<button id="double" name="double">Double</button>
-<button id="surrender" name="surrender">Surrender</button>
-<input placeholder="Minimum bet: 5" style="margin-left: 50px" type="number" id="betValue">
-<button id="testbet" name="testbet">Bet</button>
+<div style="text-align: center;" id="wrapper">
+	<div style="display: inline-block;" id="div1"></div>
+</div>
+<div style="text-align: center; margin-top: 30px;" id="wrapperButtons">
+	<div style="display: inline-block;" id="divButtons">
+		<button id="hit" name="hit">Hit</button>
+		<button id="stand" name="stand">Stand</button>
+		<button id="double" name="double">Double</button>
+		<button id="surrender" name="surrender">Surrender</button>
+		<input placeholder="Minimum bet: 5" style="margin-left: 50px" type="number" id="betValue">
+		<button id="testbet" name="testbet">Bet</button>
+	</div>
+</div>
 
 <div id="div2"></div>
 <script type="text/javascript">
