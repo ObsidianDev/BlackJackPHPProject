@@ -11,6 +11,7 @@ class ProfileController extends BaseController
         if (Session::has('username')){
         	$currentUser = User::find(Session::get('userID'));
             $currentUserHistory = History::find(array('conditions' => array('player_id=? ', Session::get('userID'))));
+            
             return View::make('home.profile',['currentUser' => $currentUser,'history' => $currentUserHistory]);
         }
         else
@@ -61,15 +62,6 @@ class ProfileController extends BaseController
 
         //'description' => "Charging of ".$chargeValues['value']." euros", 
         //'credit' => $chargeValues['value']*4,
-
-        $history = new History (array( 
-            'type' => "pay", 
-            'description' => "Charging of ".$charge." euros", 
-            'debit' => 0,
-            'credit' => 4,
-            'balance' => $userCharging->balance, 
-            'player_id' => Session::get('userID')
-        ));
 
         //$history::assign_attribute('date',$history->date);
 

@@ -20,10 +20,7 @@ $assetBundles = [
         Asset::js ( 'template.js' ),
         Asset::js ( 'highlight.pack.js' ),
         Asset::css ( 'bootstrap.min.css' ) ,
-        Asset::css ( 'font-awesome.min.css' ),
-        Asset::css ( 'hlstyles/default.css' ),
-        Asset::css ( 'main.css' ),
-        Asset::css ( 'bootstrap.icon-large.min.css' )
+        Asset::css ( 'main.css' )
     ],
     'form-controls'	=> Asset::css('form.css'),
 ];

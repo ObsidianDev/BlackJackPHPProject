@@ -1,7 +1,6 @@
 <?php
   use ArmoredCore\WebObjects\Data;
-?> 
-<?php 
+ 
   if(Data::get('userNotFound') == null && Data::get('userexists') == null) 
     echo "<div class='modal fade hiding' id='modalLogin' tabindex='-1' role='dialog' aria-hidden='true'>"; 
   else 
@@ -39,7 +38,7 @@
                   </div>
                   <div class="form-group">
                     <label>Password</label>
-                    <input <?php if(Data::get('userNotFound') != null) echo "value='".Data::get('userNotFound')->password."'"; ?> name="password" type="password" class="form-control" placeholder="Confirmation" required="Insert your password">
+                    <input <?php if(Data::get('userNotFound') != null) echo "value='".Data::get('userNotFound')->password."'"; ?> name="password" type="password" class="form-control" placeholder="Password" required="Insert your password">
                   </div>
                   <?php 
                     if(Data::get('userNotFound') != null)

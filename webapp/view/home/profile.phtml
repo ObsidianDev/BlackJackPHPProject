@@ -2,8 +2,8 @@
 use ArmoredCore\WebObjects\Asset;
 use ArmoredCore\WebObjects\Layout;
 use ArmoredCore\WebObjects\Data;
-
 Layout::includeLayout('header'); ?>
+
 <link rel="stylesheet" href="<?= Asset::css('/profile.css')?>" media="screen" >
 
 	<input type="hidden" name="page" value="profile">
@@ -101,6 +101,7 @@ Layout::includeLayout('header'); ?>
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
     	(function() {
+    		$("nav").css("margin-top", "-24px");
     		$( ".edit" ).click(function(event) {   
 
     			var field = $(this).attr("id");
@@ -153,7 +154,6 @@ Layout::includeLayout('header'); ?>
 					$("input[name=addCredit]").css("border", "none");
 					$.ajax({url: "charge/", type: 'get', data:{"value":$("input[name=addCredit]").val()}, success: function(result){
 				    	console.log(result);
-				    	//atualizar tabela
 				    }});
 				}
 				else{
