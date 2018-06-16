@@ -25,6 +25,8 @@ Router::get('profile/',          'ProfileController/index');
 Router::post('profile/edit',     'ProfileController/edit');
 Router::post('profile/charge',   'ProfileController/charge');
 
+Router::get('jacktop/',   		 'TopController/index');
+
 Router::get('backoffice/',       'BackofficeController/index');
 
 

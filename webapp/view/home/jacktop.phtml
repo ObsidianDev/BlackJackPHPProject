@@ -1,0 +1,52 @@
+<?php
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Asset;
+Layout::includeLayout('header'); ?>
+
+<input type="hidden" name="page" value="jacktop">
+
+<div style="background-color: rgba(43, 43, 43, 0.90);
+	padding-bottom: 3%; padding-top: 1%;" class="container">
+	
+	<table style="margin-top: 5%;padding-top:20px;" class="table table-dark mx-auto">
+		<thead>
+	    	<tr>
+	      		<th scope="col">#</th>
+	      		<th scope="col">Name</th>
+	      		<th scope="col">Date</th>
+	      		<th scope="col">Score</th>
+	    	</tr>
+	  	</thead>
+	 	<tbody>
+	 		<?php 
+	 			if(Data::get('top')==null)
+	 				echo "<tr id='emptyTable'><th style='text-align:center' colspan='6'>No Top 10 yet.</td></tr>";
+ 				else{
+ 					$topList = Data::get('top');
+ 					$count = 1;
+ 					foreach ($topList as $topItem) {
+ 						echo 
+ 						"<tr>
+ 							<td>".$count."</td>
+ 							<td>".$topItem->name."</td>
+ 							<td>".$topItem->data->format('Y-m-d H:i:s')."</td>
+ 							<td>".$topItem->score."</td>
+ 						</tr>";
+ 						$count++;
+ 					}
+ 				}
+ 			?>		    	  	
+	 	</tbody>
+	</table>
+
+</div>
+
+<script src="<?= Asset::js('/changeActiveNavLink.js')?>"></script>
+<script type="text/javascript">
+	(function() {
+		
+	})();
+</script>
+    
+<?php Layout::includeLayout('footer'); ?>
