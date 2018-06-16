@@ -12,12 +12,14 @@ Layout::includeLayout('modalWarning');
 </div>
 <div style="text-align: center; margin-top: 30px;" id="wrapperButtons">
 	<div style="display: inline-block;" id="divButtons">
-		<button id="hit" name="hit">Hit</button>
-		<button id="stand" name="stand">Stand</button>
-		<button id="double" name="double">Double</button>
-		<button id="surrender" name="surrender">Surrender</button>
-		<input placeholder="Minimum bet: 5" style="margin-left: 50px" type="number" id="betValue">
-		<button id="testbet" name="testbet">Bet</button>
+		<form class="form-inline" action="javacript:void(0);">
+		<button id="hit" class="btn btn-warning" style="color: white; margin-left: 5px" name="hit">Hit</button>
+		<button id="stand" class="btn btn-primary" style="margin-left: 5px" name="stand">Stand</button>
+		<button id="double" class="btn btn-success" style="margin-left: 5px" name="double">Double</button>
+		<button id="surrender" class="btn btn-danger" style="margin-left: 5px" name="surrender">Surrender</button>
+			<input class="form-control" placeholder="Minimum bet: 5" style="margin-left: 50px" type="number" id="betValue">
+			<button id="bet" class="btn btn-default" style="margin-left: 5px" name="testbet">Bet</button>
+		</form>
 	</div>
 </div>
 
@@ -45,8 +47,14 @@ Layout::includeLayout('modalWarning');
 	    }});
 	});
 	$("#surrender").click(function(){	//When you press surrender, you automatically lose but gain half the value of the bet, requests act the same way as the hit function
-	    $.ajax({url: "game", type: 'post', data:{surrender:'true'}, success: function(){
-	        	$("#div1").html('You lose.');
+	    $.ajax({url: "game", type: 'post', data:{surrender:'true'}, success: function(result){
+	        	if(result.trim()!==''){
+	        	$("#div1").html(result); //if result doesn't come out as empty, you automatically lose but gain 50% of the current bet
+	        }
+	        else{
+	        	$('#msgWarning').text('Place a bet first.');
+	        	$('#modalWarning').modal('show');//if result is empty (no Session bet variable is set)
+	        }
 	    }});
 	});
 	$("#stand").click(function(){ //When you press the stand button you won't draw anymore and the dealer only draws until 16 or higher, then win verifications occur as normal
@@ -71,7 +79,7 @@ Layout::includeLayout('modalWarning');
 	        }
 	    }});
 	});
-	$("#testbet").click(function(){ //This happens when you press the bet button
+	$("#bet").click(function(){ //This happens when you press the bet button
 
 		if ($('#betValue').val()>4) { //Verification to see if your bet is higher than 4 credits, if not, it's deemed as an invalid bet
 		    $.ajax({url: "game", type: 'post', data:{confirmBet:Math.round($('#betValue').val())}, success: function(result){

@@ -38,7 +38,6 @@ class Middle extends BaseController {
 		}
 		else if (Post::has('surrender')) {
 			if(Session::has('currentBet')){
-				
 				$dbOperation->historyUpdate('surrender',Session::get('currentBet'), Session::get('currentBalance'));
 				$game->surrender();
 				echo 'You lose.';
