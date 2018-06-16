@@ -3,7 +3,7 @@ use ArmoredCore\WebObjects\Layout;
 use ArmoredCore\WebObjects\Data;
 use ArmoredCore\WebObjects\Asset;
 Layout::includeLayout('header'); ?>
-
+<link rel="stylesheet" href="<?= Asset::css('/bootstrap/bootstrap.min.css')?>" media="screen" >
 <input type="hidden" name="page" value="jacktop">
 
 <div style="background-color: rgba(43, 43, 43, 0.90);
@@ -30,7 +30,7 @@ Layout::includeLayout('header'); ?>
  						"<tr>
  							<td>".$count."</td>
  							<td>".$topItem->name."</td>
- 							<td>".$topItem->data->format('Y-m-d H:i:s')."</td>
+ 							<td>".$topItem->date->format('Y-m-d')."</td>
  							<td>".$topItem->score."</td>
  						</tr>";
  						$count++;

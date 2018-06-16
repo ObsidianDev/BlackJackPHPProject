@@ -3,7 +3,7 @@ use ArmoredCore\WebObjects\Asset;
 use ArmoredCore\WebObjects\Layout;
 use ArmoredCore\WebObjects\Data;
 Layout::includeLayout('header'); ?>
-
+<link rel="stylesheet" href="<?= Asset::css('/bootstrap/bootstrap.min.css')?>" media="screen" >
 <link rel="stylesheet" href="<?= Asset::css('/profile.css')?>" media="screen" >
 
 	<input type="hidden" name="page" value="profile">

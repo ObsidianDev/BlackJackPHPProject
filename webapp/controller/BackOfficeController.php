@@ -34,10 +34,10 @@ class BackOfficeController extends BaseController {
 			 				<td>".$user->name."</td>
 			 				<td>".$user->balance."</td>";
 			 				if($user->blocked==0){
-		 					$table.='<td><a id='.$user->id.' class="block" style="color:blue; text-decoration:underline; cursor:pointer">Block this user</a></td>';
+		 					$table.='<td><a id='.$user->id.' class="block" style="color:red; text-decoration:underline; cursor:pointer">Block this user</a></td>';
 		 				}
 		 				else{
-		 					$table.='<td><a id='.$user->id.' class="unblock" style="color:blue; text-decoration:underline; cursor:pointer">Unblock this user</a></td>';
+		 					$table.='<td><a id='.$user->id.' class="unblock" style="color:green; text-decoration:underline; cursor:pointer">Unblock this user</a></td>';
 		 				}
 		 				$table.="</tr>";
 	 		}
